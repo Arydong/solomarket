@@ -4,18 +4,25 @@
       layout:decorate="~{/layout/layout/layout}">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Page with Aside</title>
 </head>
 <body>
-<!-- aside (비워둠 버전) -->
+<!-- aside (사용 버전) -->
 <th:block layout:fragment="aside">
-    <!-- aside가 없는 경우 지우지말고 fragment aside 지우지 말고 가만두세요 -->
+    <!--<aside> 태그는 *꼭* 남겨두시고 안에서 작업하시면 됩니다 // 절대 지우시면 안돼요-->
+    <aside>
+        <h1>aside입니다</h1>
+    </aside>
 </th:block>
 
 <!-- content -->
 <div layout:fragment="content">
     <!--스타일은 크기를 보여주기 위함입니다 지우시고 작업하시면 됩니다-->
-    <h1>main page</h1>
+    <!--여기서부터-->
+    <div style="border: 1px #ddd solid; height: 500px;">
+        본문영역
+    </div>
+    <!--여기까지 지우시면 됩니다-->
 </div>
 </body>
 

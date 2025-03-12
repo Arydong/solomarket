@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<nav th:fragment="nav">
+    <div id="nav_container">
+        <div id="nav_left"></div>
+        <div id="nav_center">
+            <div class="nav_menu"><i class="fa-solid fa-play-circle"></i>
+                <a href="/">
+                    강의
+                </a>
+            </div>
+            <div class="nav_menu"><i class="fa-regular fa-calendar"></i>
+                <a href="/view/schedule/">
+                    일정표
+                </a>
+            </div>
+            <div class="nav_menu">
+                <a th:href="@{/kwanhyun/community/CommunityMain(pageType='free')}">
+                    <i class="fa-solid fa-users"></i>&nbsp;커뮤니티</a>
+            </div>
+            <div class="nav_menu">
+                <a th:href="@{/kwanhyun/community/CommunityMain(pageType='qna')}">
+                    <i class="fa-solid fa-circle-question"></i>&nbsp;Q&A</a>
+            </div>
+            <div class="nav_menu">
+                <a th:href="@{/kwanhyun/community/CommunityMain(pageType='faq')}">
+                    <i class="fa-solid fa-book-open"></i>&nbsp;FAQ</a>
+            </div>
+        </div>
+        <div id="nav_right">
+            <div>
+                <a href="/view/class/main">
+                지식공유방
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+</html>
