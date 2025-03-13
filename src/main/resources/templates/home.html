@@ -1,28 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/layout/layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Home</title>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-<!-- aside (비워둠 버전) -->
-<th:block layout:fragment="aside">
-    <!-- aside가 없는 경우 지우지말고 fragment aside 지우지 말고 가만두세요 -->
-</th:block>
-
-<!-- content -->
-<div layout:fragment="content">
-    <!--스타일은 크기를 보여주기 위함입니다 지우시고 작업하시면 됩니다-->
-    <h1>main page</h1>
-</div>
+<h1>본문입니다.</h1>
 </body>
-
-<!--이거밖에서 스크립트 작성하면 안돌아갑니다...-->
-<div layout:fragment="scripts">
-    <script>
-        <!--스크립트 여기 안에서 작성하시면 돼요~-->
-    </script>
-</div>
 </html>
