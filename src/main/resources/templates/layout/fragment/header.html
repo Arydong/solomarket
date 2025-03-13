@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>header</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/header.css">
+</head>
+<body>
+<header th:fragment="header">
+    <div id="header_container">
+        <div id="header_logo">
+            <a href="/static">
+                <img src="/images/logo.png" alt="로고사진">
+            </a>
+        </div>
+        <div id="header_center">
+            <input type="text" placeholder="구매하고자 하는 물품을 검색해보세요" autocomplete="on">
+        </div>
+        <div id="header_right">
+            <a href="#">채팅내역</a> |
+            <a href="#">판매하기</a> |
+            <a href="#">마이페이지</a>
+        </div>
+    </div>
+</header>
+</body>
+</html>

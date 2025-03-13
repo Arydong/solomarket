@@ -24,28 +24,48 @@ repositories {
 }
 
 dependencies {
+    // Thymeleaf layout용 디펜던시
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
+
+    //이메일 센더
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // Spring Boot 기본 디펜던시
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    //jwt 라이브러리
+    // JWT 라이브러리
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    //레이아웃
-    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.0'
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // DevTools for Development
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // MariaDB JDBC 드라이버
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    // Testing 관련 디펜던시
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // ✅ WebClient 사용을 위한 WebFlux 추가
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    // 네이버 스마트 에디터 <p>태그 제거
+    implementation 'org.jsoup:jsoup:1.15.3'
+
+    //부트페이 환불 관련 디펜던시
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'io.github.bootpay:backend:+'
 }
 
 tasks.named('test') {
