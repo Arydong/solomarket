@@ -2,11 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Footer</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-
+<footer th:fragment="footer">
+    <div id="footer_container">
+        <div style="font-weight: bold">(주)썬더마켓 사업자 정보</div>
+        <div>(주)썬더마켓 | 대표자 : 이동하</div>
+        <div>사업자등록번호 : 123-45-678890</div>
+        <div>통신판매신고번호 : 제2025-부산북구-12345호</div>
+        <div>주소 : 부산광역시</div>
+        <div>대표번호 : 1577-3270</div>
+        <div>메일 : https://github.com/Arydong</div>
+    </div>
 </body>
 </html>

@@ -1,12 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout/layout}">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>홈 페이지</title>
 </head>
 <body>
-<h1>본문입니다.</h1>
+
+<!-- `layout.html`을 기반으로 홈 콘텐츠 삽입 -->
+<section layout:fragment="content">
+  <div class="content">
+    <h1>🔥🔥홈 페이지입니다🔥🔥</h1>
+  </div>
+</section>
+
 </body>
 </html>
