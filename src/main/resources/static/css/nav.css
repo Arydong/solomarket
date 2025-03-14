@@ -2,3 +2,9 @@ body{
     width: 1400px;
     margin: 0 auto;
 }
+
+.div_menu{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

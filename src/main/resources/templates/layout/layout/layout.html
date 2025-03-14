@@ -1,12 +1,28 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>공통 레이아웃</title>
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+
+<!-- Header -->
+<div th:replace="layout/fragment/header :: header"></div>
+
+<!-- Navigation -->
+<div th:replace="layout/fragment/nav :: nav"></div>
+
+<!-- Main Content -->
+<main layout:fragment="content">
+  <div class="container">
+    <h1>🔥🔥 메인 콘텐츠 영역 🔥🔥</h1>
+  </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="layout/fragment/footer :: footer"></div>
 
 </body>
 </html>
