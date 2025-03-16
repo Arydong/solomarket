@@ -5,13 +5,15 @@
     <title>header</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="/css/header.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <header th:fragment="header">
     <div id="header_container">
-        <div id="header_logo">
-            <img src="/images/logo.png" alt="로고사진" style="max-width: 250px; max-height: 150px">
+        <div id="header_left">
+            <a href="/">
+                <img src="/images/logo1.png" alt="로고사진" style="max-width: 250px; max-height: 150px">
+            </a>
         </div>
         <div id="header_center">
             <input type="text" placeholder="구매하고자 하는 물품을 검색해보세요" autocomplete="on">
