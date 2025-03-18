@@ -157,8 +157,8 @@ header {
 .sub-sub-category {
     display: none;
     position: absolute;
-    left: 400px; /* ✅ 서브 카테고리 옆에 나타나도록 설정 */
-    top: auto;
+    left: 200px;
+    top: -2px;
     width: 200px;
     background: #fff;
     border: 1px solid #ccc;
