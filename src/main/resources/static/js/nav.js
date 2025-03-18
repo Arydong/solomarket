@@ -1,39 +1,43 @@
 $(document).ready(function(){
-    // ✅ "카테고리 ▼" 버튼 클릭해야 메인 카테고리 나타남
+    let categories = {}; // ✅ 서버에서 받아올 카테고리 데이터 저장
+
+    // ✅ 서버에서 카테고리 데이터 가져오기
+    function fetchCategories() {
+        axios.get('/api/category')
+            .then(response => {
+                categories = response.data;
+            })
+            .catch(error => console.error("❌ 카테고리 데이터를 불러오지 못했습니다!", error));
+    }
+
+    // ✅ "카테고리 ▼" 클릭하면 메인 카테고리 토글
     $("#category-toggle").click(function(event){
         event.stopPropagation();
         $(".main-category").slideToggle(200);
-        $(".sub-category, .sub-sub-category").slideUp(200); // 서브 메뉴 닫기
+        $(".sub-category").slideUp(200); // 서브 카테고리 닫기
     });
 
-    // ✅ 1단계: 메인 카테고리를 클릭해야 서브 카테고리가 열림
+    // ✅ 메인 카테고리 클릭하면 서브 카테고리 동적 추가
     $(".category-item").click(function(event){
         event.stopPropagation();
-        let subMenuId = $(this).attr("data-sub");
+        let selectedCategory = $(this).attr("data-category");
+        let subCategoryMenu = $("#sub-category-container");
 
-        if ($("#" + subMenuId).is(":visible")) {
-            $("#" + subMenuId).slideUp(200);
-        } else {
-            $(".sub-category").slideUp(200); // 다른 메뉴 닫기
-            $("#" + subMenuId).slideDown(200);
+        subCategoryMenu.empty().hide(); // 기존 서브 카테고리 초기화
+
+        if (categories[selectedCategory]) {
+            categories[selectedCategory].forEach(sub => {
+                subCategoryMenu.append(`<li class="sub-category-item">${sub}</li>`);
+            });
+            subCategoryMenu.slideDown(200); // 서브 카테고리 열기
         }
     });
 
-    // ✅ 2단계: 서브 카테고리를 클릭해야 세부 카테고리가 열림
-    $(".sub-category-item").click(function(event){
-        event.stopPropagation();
-        let subSubMenuId = $(this).attr("data-sub-sub");
-
-        if ($("#" + subSubMenuId).is(":visible")) {
-            $("#" + subSubMenuId).slideUp(200);
-        } else {
-            $(".sub-sub-category").slideUp(200); // 다른 메뉴 닫기
-            $("#" + subSubMenuId).slideDown(200);
-        }
-    });
+    // ✅ 페이지 로드 시 카테고리 불러오기
+    fetchCategories();
 
     // ✅ 다른 곳 클릭하면 모든 메뉴 닫기
     $(document).click(function(){
-        $(".main-category, .sub-category, .sub-sub-category").slideUp(200);
+        $(".main-category, .sub-category").slideUp(200);
     });
 });
