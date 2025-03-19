@@ -1,22 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
     const slider = document.querySelector(".slider");
     const slides = document.querySelectorAll(".slide");
-    const totalSlides = slides.length; // 원래 슬라이드 개수 (3)
-    let currentIndex = 1; // 첫 번째 실제 슬라이드부터 시작
+    const totalSlides = slides.length;
+    let currentIndex = 1;
     let isTransitioning = false;
+    let slideInterval;
 
-    // 첫 번째 슬라이드 복제하여 마지막에 추가, 마지막 슬라이드 복제하여 처음에 추가
+    // 첫 번째와 마지막 슬라이드 복제
     const firstClone = slides[0].cloneNode(true);
     const lastClone = slides[totalSlides - 1].cloneNode(true);
 
-    slider.appendChild(firstClone); // 맨 뒤에 첫 번째 복제본 추가
-    slider.insertBefore(lastClone, slides[0]); // 맨 앞에 마지막 복제본 추가
+    slider.appendChild(firstClone); // 맨 뒤에 첫 번째 슬라이드 복제 추가
+    slider.insertBefore(lastClone, slides[0]); // 맨 앞에 마지막 슬라이드 복제 추가
 
-    // 복제본 포함한 전체 슬라이드 리스트 업데이트
+    // 슬라이드 목록 다시 가져오기
     const updatedSlides = document.querySelectorAll(".slide");
     const updatedTotalSlides = updatedSlides.length;
 
-    // 초기 위치 설정: 첫 번째 실제 슬라이드가 보이도록 (슬라이드 하나의 너비 1400px)
+    // 초기 위치 설정
     slider.style.transform = `translateX(-1400px)`;
 
     function updateSlidePosition() {
@@ -35,34 +36,87 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         updateSlidePosition();
-
-        // transition 시간(0.5초) 이후 경계 확인 후 즉시 위치 재조정
-        setTimeout(() => {
-            // 오른쪽 끝 (마지막 복제본)에 도달한 경우
-            if (currentIndex === updatedTotalSlides - 1) {
-                slider.style.transition = "none"; // 애니메이션 없이
-                currentIndex = 1; // 첫 번째 실제 슬라이드로 이동
-                updateSlidePosition();
-            }
-            // 왼쪽 끝 (첫 번째 복제본)에 도달한 경우
-            if (currentIndex === 0) {
-                slider.style.transition = "none";
-                currentIndex = totalSlides; // 마지막 실제 슬라이드로 이동
-                updateSlidePosition();
-            }
-
-            // 짧은 딜레이 후 다시 애니메이션 활성화 및 전환 가능하도록
-            setTimeout(() => {
-                slider.style.transition = "transform 0.5s ease-in-out";
-                isTransitioning = false;
-            }, 50);
-        }, 500);
     }
 
-    // 버튼 클릭 이벤트
-    document.querySelector(".next-btn").addEventListener("click", () => changeSlide(true));
-    document.querySelector(".prev-btn").addEventListener("click", () => changeSlide(false));
+    // transition이 끝나면 위치 보정
+    slider.addEventListener("transitionend", () => {
+        if (currentIndex === updatedTotalSlides - 1) {
+            slider.style.transition = "none";
+            currentIndex = 1;
+            slider.style.transform = `translateX(-${currentIndex * 1400}px)`;
+        }
+        if (currentIndex === 0) {
+            slider.style.transition = "none";
+            currentIndex = totalSlides;
+            slider.style.transform = `translateX(-${currentIndex * 1400}px)`;
+        }
+        isTransitioning = false;
+    });
 
-    // 5초마다 자동 전환
-    setInterval(() => changeSlide(true), 5000);
+    // 버튼 클릭 이벤트
+    document.querySelector(".next-btn").addEventListener("click", () => {
+        resetAutoSlide();
+        changeSlide(true);
+    });
+
+    document.querySelector(".prev-btn").addEventListener("click", () => {
+        resetAutoSlide();
+        changeSlide(false);
+    });
+
+    // 자동 슬라이드 실행
+    function startAutoSlide() {
+        slideInterval = setInterval(() => changeSlide(true), 5000);
+    }
+
+    // 자동 슬라이드 초기화
+    function resetAutoSlide() {
+        clearInterval(slideInterval);
+        startAutoSlide();
+    }
+
+    startAutoSlide();
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const productGrid = document.querySelector(".product-grid");
+    const prevBtn = document.querySelector(".product-prev-btn");
+    const nextBtn = document.querySelector(".product-next-btn");
+
+    // 상품 리스트 (예시 데이터, 실제로는 API에서 가져올 수도 있음)
+    const products = Array.from({ length: 10 }, (_, i) => `상품 ${i + 1}`);
+    let startIndex = 0; // 처음 보여줄 상품의 시작 인덱스
+    const visibleCount = 5; // 한 번에 보이는 상품 개수
+
+    function renderProducts() {
+        productGrid.innerHTML = ""; // 기존 상품 초기화
+        for (let i = startIndex; i < startIndex + visibleCount; i++) {
+            if (i >= products.length) break; // 리스트 끝에 도달하면 중지
+            const card = document.createElement("div");
+            card.classList.add("product-card");
+            card.textContent = products[i]; // 상품 이름 표시
+            productGrid.appendChild(card);
+        }
+    }
+
+    function nextProduct() {
+        if (startIndex + visibleCount < products.length) {
+            startIndex++; // 시작 인덱스를 오른쪽으로 이동
+            renderProducts();
+        }
+    }
+
+    function prevProduct() {
+        if (startIndex > 0) {
+            startIndex--; // 시작 인덱스를 왼쪽으로 이동
+            renderProducts();
+        }
+    }
+
+    nextBtn.addEventListener("click", nextProduct);
+    prevBtn.addEventListener("click", prevProduct);
+
+    renderProducts(); // 처음 렌더링
 });
