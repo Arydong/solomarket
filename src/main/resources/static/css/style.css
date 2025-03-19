@@ -12,6 +12,12 @@ header {
     border-bottom: 1px #ddd solid;
 }
 
+footer{
+    width: 100%;
+    margin-top: 50px;
+    background-color: lightgray;
+}
+
 #header_container {
     display: flex;
     justify-content: space-between;

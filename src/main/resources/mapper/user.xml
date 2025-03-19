@@ -6,7 +6,9 @@
     
     <insert id="registUser">
         INSERT INTO tbl_user VALUES
-        (null, #{userId}, #{password}, #{userName}, #{nickName}, #{email}, #{phone}, #{birth}, #{createdAt}, #{role}, #{userImage}, #{gender}, 0, 'Y')
+        (null, #{userId}, #{password}, #{userName},
+        #{nickName}, #{email}, #{phone}, #{birth},
+        #{createdAt}, #{role}, #{userImage}, #{gender}, 0, 'Y')
     </insert>
 
 
