@@ -1,6 +1,7 @@
 package com.solomarket.dao;
 
 import com.solomarket.dto.UserDto;
+import com.solomarket.security.CustomUserDetails;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -16,5 +17,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserDao {
-    int insertUser(UserDto user);
+    CustomUserDetails findByUserId(String userId);
+    void insertUser(UserDto user);
 }

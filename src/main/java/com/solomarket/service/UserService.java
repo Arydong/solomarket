@@ -22,7 +22,7 @@ public class UserService {
     private final UserDao userDao;
 
     public int insertUser(UserDto userDto) {
-        return userDao.insertUser(userDto);
+        return 0;
     }
 
 }
