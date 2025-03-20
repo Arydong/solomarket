@@ -1,91 +1,65 @@
-//package com.solomarket.security;
-//
-//import io.jsonwebtoken.Claims;
-//import io.jsonwebtoken.Jwts;
-//import io.jsonwebtoken.SignatureAlgorithm;
-//import io.jsonwebtoken.security.Keys;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.stereotype.Component;
-//
-//import java.util.Date;
-//
-///**
-// * packageName    : com.solomarket.security
-// * fileName       : JwtTokenProvider
-// * author         : 이동하
-// * date           : 25. 3. 11.
-// * description    :
-// * ===========================================================
-// * DATE              AUTHOR             NOTE
-// * -----------------------------------------------------------
-// * 25. 3. 11.        이동하       최초 생성
-// */
-//@Component
-//public class JwtTokenProvider {
-//
-//    //applicaitno.properties에 저장된 key
-//    @Value("${jwt.secret}")
-//    private String secretKey;
-//
-//    //applicaitno.properties에 저장된 토큰 지속시간
-//    @Value("${jwt.expiration}")
-//    private long expiration;
-//
-//    //토큰 생성
-//    public String createToken(String userId, String username, String nickname, String role) {
-//        Date now = new Date();
-//        Date validity = new Date(now.getTime() + expiration);
-//        return Jwts.builder()
-//                .setSubject(userId) // user_id 저장
-//                .claim("username", username) // username 저장
-//                .claim("nickname", nickname) // 닉네임 저장
-//                .claim("role", role) // 역할(role) 저장
-//                .setIssuedAt(now) // 발급 시간
-//                .setExpiration(validity) // 만료 시간
-//                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
-//                .compact();
-//    }
-//
-//    //토큰 유효성 검사
-//    public boolean validateToken(String token) {
-//        try {
-//            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-//            return true;
-//        }catch (Exception e) {
-//            return false;
-//        }
-//    }
-//
-//    //JWT에서 사용자 ID 추출
-//    public String getUserIdFromToken(String token) {
-//        Claims claims = parseClaims(token);
-//        return claims.getSubject(); // "sub" 값을 반환
-//    }
-//
-//    //JWT에서 사용자이름 추출
-//    public String getUsernameFromToken(String token) {
-//        Claims claims = parseClaims(token);
-//        return claims.get("username", String.class);
-//    }
-//
-//    //JWT에서 닉네임 추출
-//    public String getNicknameFromToken(String token) {
-//        Claims claims = parseClaims(token);
-//        return claims.get("nickname", String.class);
-//    }
-//
-//    //JWT에서 역할(Role) 추출
-//    public String getRoleFromToken(String token) {
-//        Claims claims = parseClaims(token);
-//        return claims.get("role", String.class);
-//    }
-//
-//    //JWT 파싱 메서드 (공통 로직)
-//    private Claims parseClaims(String token) {
-//        return Jwts.parser()
-//                .setSigningKey(secretKey)
-//                .parseClaimsJws(token)
-//                .getBody();
-//    }
-//
-//}
+package com.solomarket.security;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
+
+// JWT 생성 및 검증 담당 클래스
+@Component
+public class JwtTokenProvider {
+
+    @Value("${jwt.secret}") // application.properties에서 jwt.secret 값을 가져옴
+    private String secretKey;
+
+    @Value("${jwt.expiration}") // application.properties에서 jwt.expiration 값을 가져옴
+    private long expiration;
+
+    // JWT 생성
+    public String createToken(String userId, String role) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + expiration);
+
+        return Jwts.builder()
+                .setSubject(userId) // user_id 저장
+                .claim("role", role) // 사용자 역할 저장
+                .setIssuedAt(now)//발급기간
+                .setExpiration(validity) // 유효기간
+                .signWith(SignatureAlgorithm.HS256, secretKey) //비밀키서명
+                .compact();
+    }
+
+
+    // JWT 유효성 검사
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token); // 비밀 키로 검증
+            return true; // 유효하면 true 반환
+        } catch (JwtException | IllegalArgumentException e) {
+            return false; // 유효하지 않으면 false 반환
+        }
+    }
+
+    public String getUserIdFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.getSubject(); // ✅ "sub" 값을 반환하도록 수정
+    }
+
+    // ✅ JWT에서 역할(Role) 추출
+    public String getRoleFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("role", String.class); // JWT payload의 "role" 클레임
+    }
+
+    // ✅ JWT 파싱 메서드 (공통 로직)
+    private Claims parseClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+}
