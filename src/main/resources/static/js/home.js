@@ -120,3 +120,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     renderProducts(); // 처음 렌더링
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const mypageLink = document.getElementById('mypage-link');
+
+    if (mypageLink) {
+        mypageLink.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            axios.get("/api/auth/check", {
+                withCredentials: true // 🔥 쿠키 포함 필수!!!
+            })
+                .then(function () {
+                    window.location.href = "user/mypage"; // ✅ 로그인된 경우
+                })
+                .catch(function () {
+                    window.location.href = "/user/loginForm"; // ❌ 로그인 안 된 경우
+                });
+        });
+    }
+});
