@@ -121,6 +121,8 @@ document.addEventListener("DOMContentLoaded", function () {
     renderProducts(); // 처음 렌더링
 });
 
+
+//헤더에서 마이페이지 클릭했을때 로그인 되어 있다면 마이페이지, 비로그인시 로그인페이지로
 document.addEventListener("DOMContentLoaded", function () {
     const mypageLink = document.getElementById('mypage-link');
 
@@ -132,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 withCredentials: true // 🔥 쿠키 포함 필수!!!
             })
                 .then(function () {
-                    window.location.href = "user/mypage"; // ✅ 로그인된 경우
+                    window.location.href = "/user/mypage"; // ✅ 로그인된 경우
                 })
                 .catch(function () {
                     window.location.href = "/user/loginForm"; // ❌ 로그인 안 된 경우
