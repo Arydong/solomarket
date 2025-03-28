@@ -27,8 +27,8 @@ public class UserController {
         return "/user/loginForm";
     }
 
-    @RequestMapping("/regForm")
+    @RequestMapping("/regUserForm")
     public String regForm() {
-        return "/user/regForm";
+        return "/user/regUserForm";
     }
 }
