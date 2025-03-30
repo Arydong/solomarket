@@ -1,5 +1,7 @@
 package com.solomarket.security;
 
+import com.solomarket.dao.UserDao;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,13 +18,11 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
+    private final UserDao userDao; // ✅ 필수 추가
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -65,7 +65,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtTokenProvider, "keyboardtoken"),
+                        new JwtAuthenticationFilter(jwtTokenProvider, "keyboardtoken", userDao), // ✅ 완성형 필터 등록!
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .sessionManagement(session -> session
@@ -74,12 +74,11 @@ public class SecurityConfig {
                 .build();
     }
 
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // ✅ 허용할 도메인 명확히 지정 (192.168.0.2:8080 추가)
+        // ✅ 허용할 도메인 명확히 지정
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:8080",
                 "http://192.168.0.2:8080"
@@ -87,16 +86,12 @@ public class SecurityConfig {
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-
-        // ✅ credentials 허용 (쿠키 사용 가능)
-        configuration.setAllowCredentials(true);
+        configuration.setAllowCredentials(true); // ✅ 쿠키 포함 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
