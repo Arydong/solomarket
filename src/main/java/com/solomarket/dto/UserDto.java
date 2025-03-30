@@ -26,7 +26,7 @@ public class UserDto {
     private String email;
     private String phone;
     private Date birth;
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
     private String role;
     private String userImage;
     private String gender;
