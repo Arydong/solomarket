@@ -13,13 +13,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-// JWT 인증 필터: 모든 요청에서 JWT를 검증하고 인증 정보를 SecurityContext에 설정
+/**
+ * JWT 인증 필터
+ * 모든 요청에서 JWT를 검증하고, 인증 정보를 SecurityContext에 설정합니다!!!
+ * 이동하 형님의 명령으로 완성된 코드입니다!!!
+ */
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final String jwtCookieName;
-    private final UserDao userDao; // ✅ UserDao 주입받아 DB 조회 가능하게!
+    private final UserDao userDao;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -30,27 +34,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (token != null && jwtTokenProvider.validateToken(token)) {
                 String userId = jwtTokenProvider.getUserIdFromToken(token);
+                String role = jwtTokenProvider.getRoleFromToken(token);
 
-                // ✅ DB에서 유저 정보 조회 (비밀번호 포함!!)
-                CustomUserDetails userDetails = userDao.findByUserId(userId);
+                // ✅ CustomUserDetails 직접 생성 (DB에서 조회하지 않음! JWT만으로 인증)
+                CustomUserDetails userDetails = new CustomUserDetails(userId, null, role);
 
-                if (userDetails != null) {
-                    // ✅ 인증 객체 생성
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                    // ✅ SecurityContext에 저장
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("JWT 인증 중 오류 발생: " + e.getMessage());
+            logger.error("JWT 인증 중 오류 발생: ", e);
         }
 
         filterChain.doFilter(request, response);
     }
 
-    // 요청에서 쿠키를 통해 JWT 토큰을 추출하는 메서드
+    // ✅ 요청에서 JWT 토큰 추출 (쿠키 기반)
     private String resolveToken(HttpServletRequest request) {
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {

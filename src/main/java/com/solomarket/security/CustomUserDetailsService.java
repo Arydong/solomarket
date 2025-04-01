@@ -1,6 +1,7 @@
 package com.solomarket.security;
 
 import com.solomarket.dao.UserDao;
+import com.solomarket.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,13 +25,18 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        // MyBatis DAO를 통해 사용자 정보 조회
-        CustomUserDetails userDetails = userDao.findByUserId(userId);
+        // ✅ MyBatis DAO를 통해 사용자 정보 조회 (UserDto 형태로)
+        UserDto userDto = userDao.findById(userId); // 메서드 이름 맞게 사용할 것!!
 
-        if (userDetails == null) {
+        if (userDto == null) {
             throw new UsernameNotFoundException("User not found: " + userId);
         }
 
-        return userDetails;
+        // ✅ CustomUserDetails 객체로 변환해서 리턴!
+        return new CustomUserDetails(
+                userDto.getUserId(),
+                userDto.getPassword(),
+                userDto.getRole()
+        );
     }
 }
