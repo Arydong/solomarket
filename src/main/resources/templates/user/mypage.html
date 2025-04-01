@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head><meta charset="UTF-8">
+    <title>공통 레이아웃 with Aside</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/nav.js"></script>
+</head>
+<body>
+<div th:replace="~{/layout/fragment/header :: header}"></div>
+
+<div th:replace="~{/layout/fragment/nav :: nav}"></div>
+
+<div class="layout-wrapper">
+    <aside layout:fragment="aside">
+        <div>
+            <a href="#">내 정보</a><br>
+            <a href="#">판매내역</a><br>
+            <a href="#">개인정보 수정</a>
+        </div>
+    </aside>
+    <main layout:fragment="content">
+        <div class="container">
+            <h1>본문입니다.</h1>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
+<div layout:fragment="scripts"></div>
+
+</body>
+</html>

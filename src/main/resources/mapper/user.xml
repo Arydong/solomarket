@@ -14,6 +14,23 @@
         SELECT * FROM tbl_user WHERE nickname = #{nickName}
     </select>
 
+    <select id="findByUserId" resultType="com.solomarket.dto.UserDto">
+        SELECT
+            user_id AS userId,
+            password,
+            username,
+            nickname,
+            email,
+            phone,
+            birth,
+            created_at AS createdAt,
+            role,
+            user_image AS userImage,
+            gender
+        FROM tbl_user
+        WHERE user_id = #{userId}
+    </select>
+
     <insert id="insertUser" parameterType="com.solomarket.dto.UserDto">
         INSERT INTO tbl_user VALUES
         (null, #{userId}, #{password}, #{userName},

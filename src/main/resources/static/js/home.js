@@ -1,3 +1,4 @@
+// ✅ 슬라이더 기능
 document.addEventListener("DOMContentLoaded", function () {
     const slider = document.querySelector(".slider");
     const slides = document.querySelectorAll(".slide");
@@ -6,18 +7,15 @@ document.addEventListener("DOMContentLoaded", function () {
     let isTransitioning = false;
     let slideInterval;
 
-    // 첫 번째와 마지막 슬라이드 복제
     const firstClone = slides[0].cloneNode(true);
     const lastClone = slides[totalSlides - 1].cloneNode(true);
 
-    slider.appendChild(firstClone); // 맨 뒤에 첫 번째 슬라이드 복제 추가
-    slider.insertBefore(lastClone, slides[0]); // 맨 앞에 마지막 슬라이드 복제 추가
+    slider.appendChild(firstClone);
+    slider.insertBefore(lastClone, slides[0]);
 
-    // 슬라이드 목록 다시 가져오기
     const updatedSlides = document.querySelectorAll(".slide");
     const updatedTotalSlides = updatedSlides.length;
 
-    // 초기 위치 설정
     slider.style.transform = `translateX(-1400px)`;
 
     function updateSlidePosition() {
@@ -28,17 +26,10 @@ document.addEventListener("DOMContentLoaded", function () {
     function changeSlide(next = true) {
         if (isTransitioning) return;
         isTransitioning = true;
-
-        if (next) {
-            currentIndex++;
-        } else {
-            currentIndex--;
-        }
-
+        currentIndex += next ? 1 : -1;
         updateSlidePosition();
     }
 
-    // transition이 끝나면 위치 보정
     slider.addEventListener("transitionend", () => {
         if (currentIndex === updatedTotalSlides - 1) {
             slider.style.transition = "none";
@@ -53,7 +44,6 @@ document.addEventListener("DOMContentLoaded", function () {
         isTransitioning = false;
     });
 
-    // 버튼 클릭 이벤트
     document.querySelector(".next-btn").addEventListener("click", () => {
         resetAutoSlide();
         changeSlide(true);
@@ -64,12 +54,10 @@ document.addEventListener("DOMContentLoaded", function () {
         changeSlide(false);
     });
 
-    // 자동 슬라이드 실행
     function startAutoSlide() {
         slideInterval = setInterval(() => changeSlide(true), 5000);
     }
 
-    // 자동 슬라이드 초기화
     function resetAutoSlide() {
         clearInterval(slideInterval);
         startAutoSlide();
@@ -79,38 +67,37 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
+// ✅ 상품 슬라이드 기능
 document.addEventListener("DOMContentLoaded", function () {
     const productGrid = document.querySelector(".product-grid");
     const prevBtn = document.querySelector(".product-prev-btn");
     const nextBtn = document.querySelector(".product-next-btn");
 
-    // 상품 리스트 (예시 데이터, 실제로는 API에서 가져올 수도 있음)
     const products = Array.from({ length: 10 }, (_, i) => `상품 ${i + 1}`);
-    let startIndex = 0; // 처음 보여줄 상품의 시작 인덱스
-    const visibleCount = 5; // 한 번에 보이는 상품 개수
+    let startIndex = 0;
+    const visibleCount = 5;
 
     function renderProducts() {
-        productGrid.innerHTML = ""; // 기존 상품 초기화
+        productGrid.innerHTML = "";
         for (let i = startIndex; i < startIndex + visibleCount; i++) {
-            if (i >= products.length) break; // 리스트 끝에 도달하면 중지
+            if (i >= products.length) break;
             const card = document.createElement("div");
             card.classList.add("product-card");
-            card.textContent = products[i]; // 상품 이름 표시
+            card.textContent = products[i];
             productGrid.appendChild(card);
         }
     }
 
     function nextProduct() {
         if (startIndex + visibleCount < products.length) {
-            startIndex++; // 시작 인덱스를 오른쪽으로 이동
+            startIndex++;
             renderProducts();
         }
     }
 
     function prevProduct() {
         if (startIndex > 0) {
-            startIndex--; // 시작 인덱스를 왼쪽으로 이동
+            startIndex--;
             renderProducts();
         }
     }
@@ -118,27 +105,38 @@ document.addEventListener("DOMContentLoaded", function () {
     nextBtn.addEventListener("click", nextProduct);
     prevBtn.addEventListener("click", prevProduct);
 
-    renderProducts(); // 처음 렌더링
+    renderProducts();
 });
 
 
-//헤더에서 마이페이지 클릭했을때 로그인 되어 있다면 마이페이지, 비로그인시 로그인페이지로
+// ✅ 로그인 여부 확인해서 마이페이지/로그인 경로 분기 + 드롭다운 제어까지!!
 document.addEventListener("DOMContentLoaded", function () {
     const mypageLink = document.getElementById('mypage-link');
+    const dropdown = document.getElementById('user-dropdown');
+    const userMenuContainer = document.getElementById('user-menu-container');
 
     if (mypageLink) {
-        mypageLink.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            axios.get("/api/auth/check", {
-                withCredentials: true // 🔥 쿠키 포함 필수!!!
-            })
-                .then(function () {
-                    window.location.href = "/user/mypage"; // ✅ 로그인된 경우
-                })
-                .catch(function () {
-                    window.location.href = "/user/loginForm"; // ❌ 로그인 안 된 경우
+        axios.get("/api/auth/check", { withCredentials: true })
+            .then(function () {
+                // ✅ 로그인 상태면 드롭다운 열기 설정
+                mypageLink.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
                 });
-        });
+
+                // ✅ 외부 클릭 시 드롭다운 닫기
+                document.addEventListener("click", function (e) {
+                    if (!userMenuContainer.contains(e.target)) {
+                        dropdown.style.display = "none";
+                    }
+                });
+            })
+            .catch(function () {
+                // ❌ 비로그인 시 => 마이페이지 누르면 로그인 폼으로
+                mypageLink.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    window.location.href = "/user/loginForm";
+                });
+            });
     }
 });

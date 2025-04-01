@@ -31,4 +31,9 @@ public class UserController {
     public String regForm() {
         return "/user/regUserForm";
     }
+
+    @RequestMapping("/mypage")
+    public String mypage() {
+        return "/user/mypage";
+    }
 }

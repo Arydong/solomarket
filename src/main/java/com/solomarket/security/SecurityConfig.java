@@ -4,6 +4,8 @@ import com.solomarket.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,16 +24,16 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserDao userDao; // ✅ 필수 추가
+    private final UserDao userDao;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 설정 적용
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 설정
                 .csrf(csrf -> csrf.disable()) // ✅ CSRF 비활성화
                 .headers(headers -> headers
-                        .frameOptions(frame -> frame.disable()) // ✅ Iframe 허용
-                        .contentSecurityPolicy(csp -> csp.policyDirectives("frame-src *; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline';")) // ✅ CSP 정책 적용
+                        .frameOptions(frame -> frame.disable())
+                        .contentSecurityPolicy(csp -> csp.policyDirectives("frame-src *; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline';"))
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -50,13 +52,13 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/api/file/upload"
                         ).permitAll()
-                        .anyRequest().permitAll() // ✅ 모든 요청 허용 (테스트용)
+                        .anyRequest().permitAll() // 👉 추후에 권한 설정 추가 가능
                 )
                 .formLogin(form -> form
                         .loginPage("/view/loginForm")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/")
-                        .successHandler(new CustomAuthenticationSuccessHandler(jwtTokenProvider))
+                        .successHandler(new CustomAuthenticationSuccessHandler(jwtTokenProvider)) // ✅ JWT 쿠키 발급
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -65,34 +67,42 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .addFilterBefore(
-                        new JwtAuthenticationFilter(jwtTokenProvider, "keyboardtoken", userDao), // ✅ 완성형 필터 등록!
+                        new JwtAuthenticationFilter(jwtTokenProvider, "keyboardtoken", userDao),
                         UsernamePasswordAuthenticationFilter.class
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // ✅ 세션 대신 JWT
                 )
                 .build();
     }
 
+    // ✅ AuthenticationManager 추가 (Spring Security가 로그인 처리할 수 있게 설정)
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(new CustomUserDetailsService(userDao))
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .build();
+    }
+
+    // ✅ CORS 설정
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        // ✅ 허용할 도메인 명확히 지정
         configuration.setAllowedOrigins(List.of(
-                "http://localhost:8080",
-                "http://192.168.0.2:8080"
+                "http://localhost:8090"
         ));
-
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true); // ✅ 쿠키 포함 허용
+        configuration.setAllowCredentials(true); // ✅ 쿠키 허용
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
+    // ✅ BCrypt 비밀번호 암호화기
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
