@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head><meta charset="UTF-8">
-    <title>공통 레이아웃 with Aside</title>
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/mypage.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
     <script src="/js/nav.js"></script>
+    <script src="/js/home.js"></script>
+    <script src="/js/mypage.js" defer></script>
 </head>
 <body>
 <div th:replace="~{/layout/fragment/header :: header}"></div>
-
 <div th:replace="~{/layout/fragment/nav :: nav}"></div>
 
 <div class="layout-wrapper">
+    <!-- Aside 영역 -->
     <aside layout:fragment="aside">
         <div>
             <a href="#">내 정보</a><br>
@@ -21,16 +25,37 @@
             <a href="#">개인정보 수정</a>
         </div>
     </aside>
+
+    <!-- 본문 영역 -->
     <main layout:fragment="content">
         <div class="container">
-            <h1>본문입니다.</h1>
+            <div class="profile-box">
+                <img id="profile-img" th:src="@{${profileImage}}" alt="프로필 사진">
+                <input type="file" id="file-input" style="display: none">
+                <div class="profile-info">
+                    <h2 th:text="${nickname} + '의 페이지입니다.'"></h2>
+                </div>
+            </div>
+
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>판매내역</h3>
+                    <p id="sales-count">0건</p>
+                </div>
+                <div class="summary-card">
+                    <h3>구매내역</h3>
+                    <p id="purchase-count">0건</p>
+                </div>
+                <div class="summary-card">
+                    <h3>평점</h3>
+                    <p id="rating">0점</p>
+                </div>
+            </div>
         </div>
     </main>
 </div>
 
 <div th:replace="~{/layout/fragment/footer :: footer}"></div>
-
 <div layout:fragment="scripts"></div>
-
 </body>
 </html>

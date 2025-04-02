@@ -1,6 +1,7 @@
 package com.solomarket.security;
 
 import com.solomarket.dao.UserDao;
+import com.solomarket.dto.UserDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -34,15 +35,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (token != null && jwtTokenProvider.validateToken(token)) {
                 String userId = jwtTokenProvider.getUserIdFromToken(token);
-                String role = jwtTokenProvider.getRoleFromToken(token);
+                UserDto userDto = userDao.findById(userId);
 
-                // ✅ CustomUserDetails 직접 생성 (DB에서 조회하지 않음! JWT만으로 인증)
-                CustomUserDetails userDetails = new CustomUserDetails(userId, null, role);
+                if (userDto != null) {
+                    CustomUserDetails userDetails = new CustomUserDetails(
+                            userDto.getUserId(),
+                            null,
+                            userDto.getRole(),
+                            userDto.getNickName(),
+                            userDto.getUserImage()
+                    );
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         } catch (Exception e) {
             logger.error("JWT 인증 중 오류 발생: ", e);
@@ -51,7 +59,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    // ✅ 요청에서 JWT 토큰 추출 (쿠키 기반)
     private String resolveToken(HttpServletRequest request) {
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {

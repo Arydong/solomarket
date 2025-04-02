@@ -11,11 +11,16 @@ public class CustomUserDetails implements UserDetails {
     private final String userId;
     private final String password;
     private final String role; // ✅ 역할 추가
+    private final String nickname;
+    private final String userImage;
 
-    public CustomUserDetails(String userId, String password, String role) {
+
+    public CustomUserDetails(String userId, String password, String role, String nickname, String userImage) {
         this.userId = userId;
         this.password = password;
         this.role = role;
+        this.nickname = nickname;
+        this.userImage = userImage;
     }
 
     @Override
@@ -40,6 +45,10 @@ public class CustomUserDetails implements UserDetails {
     public String getRole() {
         return role;
     }
+
+    public String getNickname() {return nickname;}
+
+    public String getUserImage() {return userImage;}
 
     @Override
     public boolean isAccountNonExpired() {
