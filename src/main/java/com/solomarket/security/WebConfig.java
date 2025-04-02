@@ -1,5 +1,6 @@
 package com.solomarket.security;
 
+import com.solomarket.dao.UserDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -8,11 +9,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserDao userDao;
 
-    public WebConfig(JwtTokenProvider jwtTokenProvider) {
+    public WebConfig(JwtTokenProvider jwtTokenProvider, UserDao userDao) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userDao = userDao;
     }
     @Bean
     public WebClient webClient() {
@@ -21,7 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public UserInterceptor userInterceptor() {
-        return new UserInterceptor(jwtTokenProvider, "keyboardtoken"); // 쿠키 이름을 전달
+        return new UserInterceptor(jwtTokenProvider, "keyboardtoken", userDao);
     }
 
     @Override

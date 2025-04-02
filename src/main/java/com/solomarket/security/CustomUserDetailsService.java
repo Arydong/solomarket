@@ -36,7 +36,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new CustomUserDetails(
                 userDto.getUserId(),
                 userDto.getPassword(),
-                userDto.getRole()
+                userDto.getRole(),
+                userDto.getNickName(),
+                userDto.getUserImage()
         );
     }
 }
