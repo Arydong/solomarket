@@ -108,8 +108,6 @@ document.addEventListener("DOMContentLoaded", function () {
     renderProducts();
 });
 
-
-// ✅ 로그인 여부 확인해서 마이페이지/로그인 경로 분기 + 드롭다운 제어까지!!
 document.addEventListener("DOMContentLoaded", function () {
     const mypageLink = document.getElementById('mypage-link');
     const dropdown = document.getElementById('user-dropdown');
@@ -118,13 +116,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (mypageLink) {
         axios.get("/api/auth/check", { withCredentials: true })
             .then(function () {
-                // ✅ 로그인 상태면 드롭다운 열기 설정
+                //로그인 상태면 드롭다운 열기 설정
                 mypageLink.addEventListener("click", function (e) {
                     e.preventDefault();
                     dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
                 });
 
-                // ✅ 외부 클릭 시 드롭다운 닫기
+                //외부 클릭 시 드롭다운 닫기
                 document.addEventListener("click", function (e) {
                     if (!userMenuContainer.contains(e.target)) {
                         dropdown.style.display = "none";

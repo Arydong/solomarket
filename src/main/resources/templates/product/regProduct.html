@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>물품 등록</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/product.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/regProduct.js" defer></script>
+    <script src="/js/nav.js"></script>
+    <script src="/js/home.js"></script>
+</head>
+<body>
+<div th:replace="~{/layout/fragment/header :: header}"></div>
+<div th:replace="~{/layout/fragment/nav :: nav}"></div>
+
+<div class="layout-wrapper">
+    <main layout:fragment="content">
+        <div class="container">
+            <h1>물품 등록</h1>
+            <div class="container">
+                <h1>물품 등록</h1>
+                <form id="productForm" enctype="multipart/form-data">
+                    <input type="text" name="title" placeholder="제목"><br>
+                    <input type="number" name="price" placeholder="가격"><br>
+                    <textarea name="content" placeholder="설명"></textarea><br>
+                    <input type="text" name="category" placeholder="카테고리"><br>
+                    <input type="file" name="files" multiple><br>
+                    <button type="submit">등록하기</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div th:replace="~{/layout/fragment/footer :: footer}"></div>
+</body>
+</html>

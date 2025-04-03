@@ -39,11 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if (userDto != null) {
                     CustomUserDetails userDetails = new CustomUserDetails(
+                            userDto.getUserNo(),
                             userDto.getUserId(),
                             null,
                             userDto.getRole(),
-                            userDto.getNickName(),
-                            userDto.getUserImage()
+                            userDto.getNickName()
                     );
 
                     UsernamePasswordAuthenticationToken authentication =

@@ -8,19 +8,19 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
+    private final int userNo;
     private final String userId;
     private final String password;
     private final String role; // ✅ 역할 추가
     private final String nickname;
-    private final String userImage;
 
 
-    public CustomUserDetails(String userId, String password, String role, String nickname, String userImage) {
+    public CustomUserDetails(int userNo, String userId, String password, String role, String nickname) {
+        this.userNo = userNo;
         this.userId = userId;
         this.password = password;
         this.role = role;
         this.nickname = nickname;
-        this.userImage = userImage;
     }
 
     @Override
@@ -38,6 +38,10 @@ public class CustomUserDetails implements UserDetails {
         return userId;
     }
 
+    public int getUserNo() {
+        return userNo;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -47,8 +51,6 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public String getNickname() {return nickname;}
-
-    public String getUserImage() {return userImage;}
 
     @Override
     public boolean isAccountNonExpired() {

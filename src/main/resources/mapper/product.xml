@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solomarket.dao.ProductDao">
+
+    <insert id="insertProduct" parameterType="com.solomarket.dto.ProductDto" useGeneratedKeys="true" keyProperty="productNo">
+        INSERT INTO tbl_product
+        (seller_id, title, price, content, category, created_at, view_count)
+        VALUES
+        (#{sellerId}, #{title}, #{price}, #{content}, #{category}, NOW(), 0)
+    </insert>
+
+</mapper>
