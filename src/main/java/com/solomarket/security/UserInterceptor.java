@@ -33,11 +33,11 @@ public class UserInterceptor implements HandlerInterceptor {
             UserDto userDto = userDao.findById(userId);
 
             CustomUserDetails userDetails = new CustomUserDetails(
+                    userDto.getUserNo(),
                     userDto.getUserId(),
                     null,
                     userDto.getRole(),
-                    userDto.getNickName(),
-                    userDto.getUserImage()
+                    userDto.getNickName()
             );
 
             Authentication authentication =

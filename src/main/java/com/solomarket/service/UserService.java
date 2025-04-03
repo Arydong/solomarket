@@ -47,8 +47,4 @@ public class UserService {
     public UserDto findByNickName(String nickName) {
         return userDao.findByNick(nickName);
     }
-
-    public void updateUserProfileImage(String userId, String imagePath) {
-        userDao.updateProfileImage(userId, imagePath);
-    }
 }

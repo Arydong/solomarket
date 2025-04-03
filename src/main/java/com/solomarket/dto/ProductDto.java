@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ProductDto {
-    private int productNo;
-    private int sellerId;
+    private Long productNo;
+    private Long sellerId;
     private String title;
     private int price;
     private String content;

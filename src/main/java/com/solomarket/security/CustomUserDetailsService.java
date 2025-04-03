@@ -34,11 +34,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         // ✅ CustomUserDetails 객체로 변환해서 리턴!
         return new CustomUserDetails(
+                userDto.getUserNo(),
                 userDto.getUserId(),
                 userDto.getPassword(),
                 userDto.getRole(),
-                userDto.getNickName(),
-                userDto.getUserImage()
+                userDto.getNickName()
         );
     }
 }
