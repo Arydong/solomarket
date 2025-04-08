@@ -1,36 +1,53 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/layout/layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title>home</title>
+    <title>공통 레이아웃</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axos/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/home.css">
+    <script src="/js/nav.js"></script>
     <script src="/js/home.js"></script>
 </head>
 <body>
-<section layout:fragment="content">
-    <div class="slider-container">
-        <div class="slider">
-            <div class="slide" style="background-image: url('/images/b3.png');"></div>
-            <div class="slide" style="background-image: url('/images/b2.png');"></div>
-            <div class="slide" style="background-image: url('/images/b1.png');"></div>
-        </div>
-            <button class="prev-btn">&#10094;</button>
-            <button class="next-btn">&#10095;</button>
+
+<!-- Header -->
+<div th:replace="~{/layout/fragment/header :: header}"></div>
+
+<!-- Navigation -->
+<div th:replace="~{/layout/fragment/nav :: nav}"></div>
+
+<!-- Main Content -->
+<main layout:fragment="content">
+    <div class="container">
+        <section layout:fragment="content">
+            <div class="slider-container">
+                <div class="slider">
+                    <div class="slide" style="background-image: url('/images/b1.png');"></div>
+                    <div class="slide" style="background-image: url('/images/b2.png');"></div>
+                    <div class="slide" style="background-image: url('/images/b3.png');"></div>
+                </div>
+                <button class="prev-btn">&#10094;</button>
+                <button class="next-btn">&#10095;</button>
+            </div>
+            <div>
+                <h1 style="font-weight: bold; font-size: 40px;">방금 등록된 상품</h1>
+            </div>
+            <div style="margin-bottom: 100px">
+                <div class="product-container">
+                    <button class="product-prev-btn">&#10094;</button>
+                    <div class="product-grid"></div>
+                    <button class="product-next-btn">&#10095;</button>
+                </div>
+            </div>
+        </section>
     </div>
-    <div>
-        <h1 style="font-weight: bold; font-size: 40px;">방금 등록된 상품</h1>
-    </div>
-    <div style="margin-bottom: 100px">
-        <div class="product-container">
-            <button class="product-prev-btn">&#10094;</button>
-            <div class="product-grid"></div>
-            <button class="product-next-btn">&#10095;</button>
-        </div>
-    </div>
-</section>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
 </body>
 </html>
