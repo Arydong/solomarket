@@ -1,26 +1,28 @@
-// ✅ 슬라이더 기능
 document.addEventListener("DOMContentLoaded", function () {
     const slider = document.querySelector(".slider");
-    const slides = document.querySelectorAll(".slide");
-    const totalSlides = slides.length;
+    const slides = slider.querySelectorAll(".slide");
+    const totalSlides = slides.length;  // 원본 슬라이드 개수 (예: 3)
+    const slideWidth = 1400;
     let currentIndex = 1;
     let isTransitioning = false;
     let slideInterval;
 
+    // 클론 생성: 첫 슬라이드와 마지막 슬라이드 복제
     const firstClone = slides[0].cloneNode(true);
     const lastClone = slides[totalSlides - 1].cloneNode(true);
-
     slider.appendChild(firstClone);
     slider.insertBefore(lastClone, slides[0]);
 
-    const updatedSlides = document.querySelectorAll(".slide");
-    const updatedTotalSlides = updatedSlides.length;
+    // 복제 후 전체 슬라이드 개수
+    const updatedSlides = slider.querySelectorAll(".slide");
+    const updatedTotalSlides = updatedSlides.length; // (예: 5)
 
-    slider.style.transform = `translateX(-1400px)`;
+    // 초기 위치: 실제 첫 슬라이드가 보이도록 (인덱스 1)
+    slider.style.transform = `translateX(-${slideWidth}px)`;
 
     function updateSlidePosition() {
         slider.style.transition = "transform 0.5s ease-in-out";
-        slider.style.transform = `translateX(-${currentIndex * 1400}px)`;
+        slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
     }
 
     function changeSlide(next = true) {
@@ -30,16 +32,23 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSlidePosition();
     }
 
-    slider.addEventListener("transitionend", () => {
+    slider.addEventListener("transitionend", (e) => {
+        // transform 전환에 대해서만 처리
+        if (e.propertyName !== "transform") return;
+
         if (currentIndex === updatedTotalSlides - 1) {
+            // 복제된 첫 슬라이드에 도달한 경우 → 즉시 첫 번째 원본 슬라이드(인덱스 1)로 리셋
             slider.style.transition = "none";
             currentIndex = 1;
-            slider.style.transform = `translateX(-${currentIndex * 1400}px)`;
-        }
-        if (currentIndex === 0) {
+            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+            // 강제 리플로우
+            void slider.offsetWidth;
+        } else if (currentIndex === 0) {
+            // 복제된 마지막 슬라이드에 도달한 경우 → 즉시 마지막 원본 슬라이드(인덱스 totalSlides)로 리셋
             slider.style.transition = "none";
             currentIndex = totalSlides;
-            slider.style.transform = `translateX(-${currentIndex * 1400}px)`;
+            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+            void slider.offsetWidth;
         }
         isTransitioning = false;
     });
@@ -55,7 +64,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function startAutoSlide() {
-        slideInterval = setInterval(() => changeSlide(true), 5000);
+        slideInterval = setInterval(() => {
+            changeSlide(true);
+        }, 5000);
     }
 
     function resetAutoSlide() {
@@ -66,48 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
     startAutoSlide();
 });
 
-
-// ✅ 상품 슬라이드 기능
-document.addEventListener("DOMContentLoaded", function () {
-    const productGrid = document.querySelector(".product-grid");
-    const prevBtn = document.querySelector(".product-prev-btn");
-    const nextBtn = document.querySelector(".product-next-btn");
-
-    const products = Array.from({ length: 10 }, (_, i) => `상품 ${i + 1}`);
-    let startIndex = 0;
-    const visibleCount = 5;
-
-    function renderProducts() {
-        productGrid.innerHTML = "";
-        for (let i = startIndex; i < startIndex + visibleCount; i++) {
-            if (i >= products.length) break;
-            const card = document.createElement("div");
-            card.classList.add("product-card");
-            card.textContent = products[i];
-            productGrid.appendChild(card);
-        }
-    }
-
-    function nextProduct() {
-        if (startIndex + visibleCount < products.length) {
-            startIndex++;
-            renderProducts();
-        }
-    }
-
-    function prevProduct() {
-        if (startIndex > 0) {
-            startIndex--;
-            renderProducts();
-        }
-    }
-
-    nextBtn.addEventListener("click", nextProduct);
-    prevBtn.addEventListener("click", prevProduct);
-
-    renderProducts();
-});
-
 document.addEventListener("DOMContentLoaded", function () {
     const mypageLink = document.getElementById('mypage-link');
     const dropdown = document.getElementById('user-dropdown');
@@ -116,13 +85,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (mypageLink) {
         axios.get("/api/auth/check", { withCredentials: true })
             .then(function () {
-                //로그인 상태면 드롭다운 열기 설정
+                // 로그인 상태면 드롭다운 토글 동작
                 mypageLink.addEventListener("click", function (e) {
                     e.preventDefault();
                     dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
                 });
 
-                //외부 클릭 시 드롭다운 닫기
+                // 외부 클릭 시 드롭다운 닫기
                 document.addEventListener("click", function (e) {
                     if (!userMenuContainer.contains(e.target)) {
                         dropdown.style.display = "none";
@@ -130,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             })
             .catch(function () {
-                // ❌ 비로그인 시 => 마이페이지 누르면 로그인 폼으로
+                // 비로그인 상태: 클릭 시 로그인 폼으로 이동
                 mypageLink.addEventListener("click", function (e) {
                     e.preventDefault();
                     window.location.href = "/user/loginForm";
