@@ -1,13 +1,12 @@
 package com.solomarket.controllers.api;
 
 import com.solomarket.dto.ProductDto;
+import com.solomarket.security.CustomUserDetails;
 import com.solomarket.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -24,7 +23,7 @@ import java.util.List;
  * 25. 4. 3.        이동하       최초 생성
  */
 @RestController
-@RequestMapping("/product-api")
+@RequestMapping("/api/product")
 @RequiredArgsConstructor
 public class ProductControllerApi {
     private final ProductService productService;
@@ -32,9 +31,17 @@ public class ProductControllerApi {
     @PostMapping("/register")
     public ResponseEntity<?> registerProduct(
             @RequestPart("product") ProductDto productDTO,
-            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
+            @RequestPart(value = "files", required = false) List<MultipartFile> files,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
+        // 로그인한 사용자의 ID를 sellerId에 할당합니다.
+        productDTO.setSellerId(customUserDetails.getUserNo());
         productService.registerProductWithFiles(productDTO, files);
         return ResponseEntity.ok("물품이 등록되었습니다.");
+    }
+    @GetMapping("/latest")
+    public ResponseEntity<List<ProductDto>> getLatestProducts() {
+        List<ProductDto> latestProducts = productService.getLatestProducts();
+        return ResponseEntity.ok(latestProducts);
     }
 }

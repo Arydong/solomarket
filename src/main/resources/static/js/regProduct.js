@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         formData.append("product", new Blob([JSON.stringify(product)], { type: "application/json" }));
 
-        axios.post("/product-api/register", formData, {
+        axios.post("/api/product/register", formData, {
             headers: { "Content-Type": "multipart/form-data" }
         })
             .then(() => {

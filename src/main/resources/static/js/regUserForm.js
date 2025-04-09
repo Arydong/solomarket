@@ -6,7 +6,7 @@ function checkDuplicateId() {
         return;
     }
 
-    axios.get(`/user-api/check-id/${userId}`)
+    axios.get(`/api/user/check-id/${userId}`)
         .then(res => {
             if (res.data === true) {
                 $('#id_error_message').text('사용 가능한 아이디입니다!!!').css('color', 'green');
@@ -28,7 +28,7 @@ function checkDuplicateNick() {
         return;
     }
 
-    axios.get(`/user-api/check-nick`, {
+    axios.get(`/api/user/check-nick`, {
         params: { nickName: nickName }
     })
         .then(res => {
@@ -62,7 +62,7 @@ function checkRegistInfo() {
         role: 'USER'
     };
 
-    axios.post('/user-api/register', user)
+    axios.post('/api/user/register', user)
         .then(() => {
             alert('환영합니다.');
             location.href = '/user/loginForm';

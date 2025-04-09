@@ -17,12 +17,12 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ProductDto {
-    private Long productNo;
-    private Long sellerId;
+    private int productNo;
+    private int sellerId;
     private String title;
     private int price;
     private String content;
-    private String productImage;
+    private int fileNo;
     private String situation;
     private String category;
     private LocalDateTime createdAt;

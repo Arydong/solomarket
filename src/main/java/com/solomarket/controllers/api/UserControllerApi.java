@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 /**
  * packageName    : com.solomarket.controllers.api
  * fileName       : UserControllerApi
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * 25. 3. 30.        이동하       최초 생성
  */
 @RestController
-@RequestMapping("/user-api")
+@RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserControllerApi {
 

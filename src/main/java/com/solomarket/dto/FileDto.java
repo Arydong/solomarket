@@ -15,8 +15,8 @@ import lombok.Data;
  */
 @Data
 public class FileDto {
-    private Long fileNo;
-    private Long productNo;
+    private int fileNo;
+    private int productNo;
     private String fileName;
     private String fileUrl;
     private String fileType;

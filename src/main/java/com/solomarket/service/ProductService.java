@@ -8,20 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * packageName    : com.solomarket.service
- * fileName       : ProductService
- * author         : 이동하
- * date           : 25. 4. 3.
- * description    :
- * ===========================================================
- * DATE              AUTHOR             NOTE
- * -----------------------------------------------------------
- * 25. 4. 3.        이동하       최초 생성
- */
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -30,8 +21,11 @@ public class ProductService {
     private final FileRepository fileRepository;
 
     public void registerProductWithFiles(ProductDto productDto, List<MultipartFile> files) {
-        productDto.setSellerId(1L); // 🔥 테스트용 sellerId. 실제 로그인 사용자로 변경할 것!
+        // sellerId는 Controller에서 동적으로 세팅되어 있다고 가정합니다.
         productDao.insertProduct(productDto); // DB 등록 후 productNo 생성됨
+
+        // Windows의 C 드라이브의 upload/product 폴더를 업로드 디렉토리로 사용합니다.
+        String uploadDir = "C:/upload/product/"; // 경로 구분자는 슬래시(/)를 사용합니다.
 
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
@@ -39,24 +33,36 @@ public class ProductService {
                     String originalName = file.getOriginalFilename();
                     String uuid = UUID.randomUUID().toString();
                     String fileName = uuid + "_" + originalName;
-                    String fileUrl = "/upload/product/" + fileName;
+                    String fileUrl = "/upload/product/" + fileName; // 클라이언트에서 접근할 URL
 
-                    // 경로에 저장 생략됨 (형님 파일 저장 로직 넣으셔야 함)
+                    // 업로드 폴더 생성 확인
+                    File uploadFolder = new File(uploadDir);
+                    if (!uploadFolder.exists()) {
+                        uploadFolder.mkdirs(); // 폴더가 없으면 생성
+                    }
+                    // 파일 저장
+                    File destinationFile = new File(uploadDir + fileName);
+                    file.transferTo(destinationFile);
 
+                    // FileEntity 생성 후 DB에 저장
                     FileEntity fileEntity = FileEntity.builder()
                             .productNo(productDto.getProductNo())
                             .fileName(originalName)
                             .fileUrl(fileUrl)
                             .fileType(file.getContentType())
                             .fileSize(file.getSize())
+                            .createdAt(java.time.LocalDateTime.now())
                             .build();
 
                     fileRepository.save(fileEntity);
 
-                } catch (Exception e) {
+                } catch (IOException e) {
                     throw new RuntimeException("파일 저장 실패", e);
                 }
             }
         }
+    }
+    public List<ProductDto> getLatestProducts() {
+        return productDao.selectLatestProducts();
     }
 }

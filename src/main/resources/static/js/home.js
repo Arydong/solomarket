@@ -1,109 +1,72 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const slider = document.querySelector(".slider");
-    const slides = slider.querySelectorAll(".slide");
-    const totalSlides = slides.length;  // 원본 슬라이드 개수 (예: 3)
-    const slideWidth = 1400;
-    let currentIndex = 1;
-    let isTransitioning = false;
-    let slideInterval;
+    const chatLink = document.getElementById("chat-link");
+    const sellItemLink = document.getElementById("sell-item-link");
+    const mypageLink = document.getElementById("mypage-link");
+    const dropdown = document.getElementById("user-dropdown");
+    const userMenuContainer = document.getElementById("user-menu-container");
 
-    // 클론 생성: 첫 슬라이드와 마지막 슬라이드 복제
-    const firstClone = slides[0].cloneNode(true);
-    const lastClone = slides[totalSlides - 1].cloneNode(true);
-    slider.appendChild(firstClone);
-    slider.insertBefore(lastClone, slides[0]);
+    // 로그인 여부 체크 (withCredentials 옵션으로 쿠키/세션 정보를 포함)
+    axios.get("/api/auth/check", { withCredentials: true })
+        .then(function () {
+            // 로그인 상태인 경우
 
-    // 복제 후 전체 슬라이드 개수
-    const updatedSlides = slider.querySelectorAll(".slide");
-    const updatedTotalSlides = updatedSlides.length; // (예: 5)
-
-    // 초기 위치: 실제 첫 슬라이드가 보이도록 (인덱스 1)
-    slider.style.transform = `translateX(-${slideWidth}px)`;
-
-    function updateSlidePosition() {
-        slider.style.transition = "transform 0.5s ease-in-out";
-        slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-    }
-
-    function changeSlide(next = true) {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        currentIndex += next ? 1 : -1;
-        updateSlidePosition();
-    }
-
-    slider.addEventListener("transitionend", (e) => {
-        // transform 전환에 대해서만 처리
-        if (e.propertyName !== "transform") return;
-
-        if (currentIndex === updatedTotalSlides - 1) {
-            // 복제된 첫 슬라이드에 도달한 경우 → 즉시 첫 번째 원본 슬라이드(인덱스 1)로 리셋
-            slider.style.transition = "none";
-            currentIndex = 1;
-            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-            // 강제 리플로우
-            void slider.offsetWidth;
-        } else if (currentIndex === 0) {
-            // 복제된 마지막 슬라이드에 도달한 경우 → 즉시 마지막 원본 슬라이드(인덱스 totalSlides)로 리셋
-            slider.style.transition = "none";
-            currentIndex = totalSlides;
-            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-            void slider.offsetWidth;
-        }
-        isTransitioning = false;
-    });
-
-    document.querySelector(".next-btn").addEventListener("click", () => {
-        resetAutoSlide();
-        changeSlide(true);
-    });
-
-    document.querySelector(".prev-btn").addEventListener("click", () => {
-        resetAutoSlide();
-        changeSlide(false);
-    });
-
-    function startAutoSlide() {
-        slideInterval = setInterval(() => {
-            changeSlide(true);
-        }, 5000);
-    }
-
-    function resetAutoSlide() {
-        clearInterval(slideInterval);
-        startAutoSlide();
-    }
-
-    startAutoSlide();
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-    const mypageLink = document.getElementById('mypage-link');
-    const dropdown = document.getElementById('user-dropdown');
-    const userMenuContainer = document.getElementById('user-menu-container');
-
-    if (mypageLink) {
-        axios.get("/api/auth/check", { withCredentials: true })
-            .then(function () {
-                // 로그인 상태면 드롭다운 토글 동작
-                mypageLink.addEventListener("click", function (e) {
-                    e.preventDefault();
-                    dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
-                });
-
-                // 외부 클릭 시 드롭다운 닫기
-                document.addEventListener("click", function (e) {
-                    if (!userMenuContainer.contains(e.target)) {
-                        dropdown.style.display = "none";
-                    }
-                });
-            })
-            .catch(function () {
-                // 비로그인 상태: 클릭 시 로그인 폼으로 이동
-                mypageLink.addEventListener("click", function (e) {
-                    e.preventDefault();
-                    window.location.href = "/user/loginForm";
-                });
+            chatLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                // 채팅내역 페이지 URL (예: /chat)로 이동
+                window.location.href = "/chat";
             });
-    }
+
+            sellItemLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                // 판매하기(상품 등록) 페이지 URL (예: /product/reg)로 이동
+                window.location.href = "/product/reg";
+            });
+
+            mypageLink.addEventListener("click", function (e) {
+                e.preventDefault();
+                // 로그인 상태에서는 마이페이지 버튼을 누르면 드롭다운 토글 처리
+                dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+            });
+
+            // 드롭다운 외부 클릭 시 드롭다운 닫기 처리
+            document.addEventListener("click", function (e) {
+                if (!userMenuContainer.contains(e.target)) {
+                    dropdown.style.display = "none";
+                }
+            });
+        })
+        .catch(function () {
+            // 비로그인 상태인 경우: 모든 버튼을 클릭 시 로그인 폼으로 이동합니다.
+            const redirectToLogin = function (e) {
+                e.preventDefault();
+                window.location.href = "/user/loginForm";
+            };
+
+            chatLink.addEventListener("click", redirectToLogin);
+            sellItemLink.addEventListener("click", redirectToLogin);
+            mypageLink.addEventListener("click", redirectToLogin);
+        });
+
+    const productGrid = document.querySelector(".product-grid");
+    axios.get('/api/product/latest')
+        .then(function(response) {
+            const products = response.data;
+
+            productGrid.innerHTML = "";
+
+            products.forEach(product => {
+                const card = document.createElement("div");
+                card.classList.add("product-card");
+                card.innerHTML = `
+                    <img src="${product.productImage ? product.productImage : '/images/default-product.png'}" alt="${product.title}" style="width: 100%; height: auto;">
+                    <h3>${product.title}</h3>
+                    <p>${product.price.toLocaleString()}원</p>
+                `;
+                productGrid.appendChild(card);
+            });
+        })
+        .catch(function(error) {
+            console.error("최신 상품 조회 실패", error);
+            productGrid.innerHTML = "<p>최신 상품을 불러오지 못했습니다.</p>";
+        });
 });
