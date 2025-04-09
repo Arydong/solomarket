@@ -11,6 +11,22 @@
         (#{sellerId}, #{title}, #{price}, #{content}, #{category}, NOW(), 0)
     </insert>
 
- 
+    <select id="selectLatestProducts" resultType="com.solomarket.dto.ProductDto">
+        SELECT
+        p.product_no,
+        p.seller_id,
+        p.title,
+        p.price,
+        p.content,
+        f.file_url AS fileUrl,
+        p.situation,
+        p.category,
+        p.created_at,
+        p.view_count
+        FROM tbl_product p
+        LEFT JOIN tbl_file f ON p.product_no = f.product_no
+        ORDER BY p.created_at DESC
+        LIMIT 10
+    </select>
 
 </mapper>

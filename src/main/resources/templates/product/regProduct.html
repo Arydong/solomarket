@@ -18,22 +18,58 @@
 
 <div class="layout-wrapper">
     <main layout:fragment="content">
+        <h1 style="text-align: center">물품 등록</h1>
         <div class="container">
-            <h1>물품 등록</h1>
-            <div class="container">
-                <form id="productForm" enctype="multipart/form-data">
-                    <input type="text" name="title" placeholder="제목"><br>
-                    <input type="number" name="price" placeholder="가격"><br>
-                    <textarea name="content" placeholder="설명"></textarea><br>
-                    <input type="text" name="category" placeholder="카테고리"><br>
-                    <input type="file" name="files" multiple><br>
-                    <button type="submit">등록하기</button>
-                </form>
-            </div>
+            <form id="productForm" enctype="multipart/form-data">
+                <input type="text" name="title" placeholder="제목">
+                <input type="number" name="price" placeholder="가격">
+                <input type="file" name="files" multiple>
+                <textarea name="content" placeholder="설명"></textarea>
+
+                <!-- ✅ 대분류 select -->
+                <select id="mainCategory">
+                    <option value="" disabled selected>대분류 선택</option>
+                    <option value="office">사무용</option>
+                    <option value="gaming">게이밍</option>
+                    <option value="outer">휴대용</option>
+                </select>
+
+                <!-- ✅ 소분류 select -->
+                <select name="category" id="subCategory">
+                    <option value="" disabled selected>소분류 선택</option>
+                </select>
+                <br>
+                <button type="submit">등록하기</button>
+            </form>
         </div>
     </main>
 </div>
 
 <div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
+<script>
+    const categories = {
+        office: ["멤브레인", "기계식", "무접점", "로우프로파일", "펜타그래프", "기타"],
+        gaming: ["멤브레인", "기계식", "무접점", "자석축", "로우프로파일", "펜타그래프", "기타"],
+        outer: ["휴대용 키보드", "미니 키보드", "블루트스 키보드", "속기 키보드", "기타"]
+    };
+
+    const mainCategory = document.getElementById("mainCategory");
+    const subCategory = document.getElementById("subCategory");
+
+    mainCategory.addEventListener("change", function () {
+        const selected = this.value;
+        const subOptions = categories[selected];
+
+        subCategory.innerHTML = '<option value="" disabled selected>소분류 선택</option>';
+
+        subOptions.forEach(function (subcategory) {
+            const option = document.createElement("option");
+            option.value = subcategory;
+            option.textContent = subcategory;
+            subCategory.appendChild(option);
+        });
+    });
+</script>
 </body>
 </html>

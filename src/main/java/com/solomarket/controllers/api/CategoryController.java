@@ -31,7 +31,7 @@ public class CategoryController {
 
         categories.put("office", Arrays.asList("멤브레인", "기계식", "무접점", "로우프로파일", "펜타그래프", "기타"));
         categories.put("gaming", Arrays.asList("멤브레인", "기계식", "무접점", "자석축", "로우프로파일", "펜타그래프", "기타"));
-        categories.put("outer", Arrays.asList("휴대용 키보드", "미니 키보드", "블루트스 키보드"));
+        categories.put("outer", Arrays.asList("휴대용 키보드", "미니 키보드", "블루트스 키보드", "속기 키보드", "기타"));
 
         return ResponseEntity.ok(categories);
     }

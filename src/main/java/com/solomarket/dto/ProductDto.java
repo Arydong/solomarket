@@ -22,7 +22,7 @@ public class ProductDto {
     private String title;
     private int price;
     private String content;
-    private int fileNo;
+    private String fileUrl;
     private String situation;
     private String category;
     private LocalDateTime createdAt;
