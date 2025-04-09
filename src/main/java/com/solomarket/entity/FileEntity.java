@@ -30,10 +30,10 @@ public class FileEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long fileNo;
+    private int fileNo;
 
     @Column(nullable = false)
-    private Long productNo;
+    private int productNo;
 
     @Column(nullable = false)
     private String fileName;

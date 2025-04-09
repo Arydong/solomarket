@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -31,5 +32,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(userInterceptor())
                 .addPathPatterns("/**")  // 모든 요청에 대해 인터셉터 적용
                 .excludePathPatterns("/view/loginForm", "/login", "/logout", "/css/**", "/js/**", "/images/**"); // 로그인 관련 경로는 제외
+    }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // "/upload/product/**" 요청을 Windows의 C:/upload/product/ 폴더에 매핑합니다.
+        registry.addResourceHandler("/upload/product/**")
+                .addResourceLocations("file:///C:/upload/product/");
     }
 }

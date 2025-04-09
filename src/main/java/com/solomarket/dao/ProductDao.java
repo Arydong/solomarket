@@ -3,6 +3,8 @@ package com.solomarket.dao;
 import com.solomarket.dto.ProductDto;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * packageName    : com.solomarket.dao
  * fileName       : ProductDao
@@ -17,4 +19,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ProductDao {
     void insertProduct(ProductDto productDto);
+    List<ProductDto> selectLatestProducts();
 }

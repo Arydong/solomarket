@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class FileService {
     private final FileRepository fileRepository;
 
-    public List<FileDto> getFilesByProductNo(Long productNo) {
+    public List<FileDto> getFilesByProductNo(int productNo) {
         return fileRepository.findByProductNo(productNo)
                 .stream()
                 .map(this::toDTO)

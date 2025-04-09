@@ -11,4 +11,6 @@
         (#{sellerId}, #{title}, #{price}, #{content}, #{category}, NOW(), 0)
     </insert>
 
+ 
+
 </mapper>

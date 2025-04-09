@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let formData = new FormData();
             formData.append("file", file);
 
-            axios.post("/user-api/upload-profile", formData, {
+            axios.post("/api/user/upload-profile", formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             }).then(response => {
                 console.log("업로드 성공:", response.data);

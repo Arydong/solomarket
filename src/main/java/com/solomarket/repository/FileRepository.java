@@ -16,6 +16,6 @@ import java.util.List;
  * -----------------------------------------------------------
  * 25. 4. 3.        이동하       최초 생성
  */
-public interface FileRepository extends JpaRepository<FileEntity, Long> {
-    List<FileEntity> findByProductNo(Long productNo);
+public interface FileRepository extends JpaRepository<FileEntity, Integer> {
+    List<FileEntity> findByProductNo(int productNo);
 }
