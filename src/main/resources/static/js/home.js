@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const card = document.createElement("div");
                 card.classList.add("product-card");
                 card.innerHTML = `
-                    <img src="${product.productImage ? product.productImage : '/images/default-product.png'}" alt="${product.title}" style="width: 100%; height: auto;">
+                    <img src="${product.fileUrl ? product.fileUrl : '/images/default-product.png'}" alt="${product.title}" style="width: 100%; height: auto;">
                     <h3>${product.title}</h3>
                     <p>${product.price.toLocaleString()}원</p>
                 `;
