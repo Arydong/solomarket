@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<head>
-    <meta charset="UTF-8">
-    <title>마이페이지</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/mypage.css">
+<head><meta charset="UTF-8">
+    <title>공통 레이아웃 with Aside</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/productList.css">
     <script src="/js/nav.js"></script>
     <script src="/js/home.js"></script>
-    <script src="/js/mypage.js" defer></script>
 </head>
 <body>
 <div th:replace="~{/layout/fragment/header :: header}"></div>
+
 <div th:replace="~{/layout/fragment/nav :: nav}"></div>
 
 <div class="layout-wrapper">
-    <!-- Aside 영역 -->
     <aside layout:fragment="aside">
         <div>
             <a href="/user/mypage">내 정보</a><br>
@@ -25,28 +23,16 @@
             <a href="#">개인정보 수정</a>
         </div>
     </aside>
-
-    <!-- 본문 영역 -->
     <main layout:fragment="content">
         <div class="container">
-            <div class="profile-box">
-                <div class="profile-info">
-                    <h2 th:text="${nickname} + '님의 페이지입니다.'"></h2>
-                </div>
-            </div>
-
-            <div class="summary-cards">
-                <div class="summary-card">
-                    <h3>판매내역</h3>
-                    <p id="sales-count">0건</p>
-                </div>
-                <div class="summary-card">
-                    <h3>구매내역</h3>
-                    <p id="purchase-count">0건</p>
-                </div>
-                <div class="summary-card">
-                    <h3>평점</h3>
-                    <p id="rating">0점</p>
+            <h2>내가 등록한 상품</h2>
+            <div class="product-grid">
+                <div th:each="product : ${myProductList}" class="product-card">
+                    <a th:href="@{'/product/' + ${product.productNo}}">
+                        <img th:src="${product.fileUrl}" alt="상품 이미지">
+                        <h4 th:text="${product.title}">상품명</h4>
+                        <p th:text="${#numbers.formatInteger(product.price, 3, 'COMMA') + '원'}">0원</p>
+                    </a>
                 </div>
             </div>
         </div>
@@ -54,6 +40,8 @@
 </div>
 
 <div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
 <div layout:fragment="scripts"></div>
+
 </body>
 </html>

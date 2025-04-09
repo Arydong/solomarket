@@ -65,4 +65,12 @@ public class ProductService {
     public List<ProductDto> getLatestProducts() {
         return productDao.selectLatestProducts();
     }
+
+    public List<ProductDto> getProductsBySellerId(int sellerId) {
+        return productDao.getProductsBySellerId(sellerId);
+    }
+
+    public ProductDto getProductById(int productNo) {
+        return productDao.getProductById(productNo);
+    }
 }

@@ -19,5 +19,10 @@ import java.util.List;
 @Mapper
 public interface ProductDao {
     void insertProduct(ProductDto productDto);
+
     List<ProductDto> selectLatestProducts();
+
+    List<ProductDto> getProductsBySellerId(int sellerId);
+
+    ProductDto getProductById(int productNo);
 }

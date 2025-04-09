@@ -29,4 +29,39 @@
         LIMIT 10
     </select>
 
+    <select id="getProductsBySellerId" parameterType="int" resultType="com.solomarket.dto.ProductDto">
+        SELECT
+        p.product_no AS productNo,
+        p.seller_id AS sellerId,
+        p.title,
+        p.price,
+        p.content,
+        f.file_url AS fileUrl,
+        p.situation,
+        p.category,
+        p.created_at,
+        p.view_count
+        FROM tbl_product p
+        LEFT JOIN tbl_file f ON p.product_no = f.product_no
+        WHERE p.seller_id = #{sellerId}
+        ORDER BY p.created_at DESC
+    </select>
+
+    <select id="getProductById" parameterType="int" resultType="com.solomarket.dto.ProductDto">
+        SELECT
+        p.product_no,
+        p.seller_id,
+        p.title,
+        p.price,
+        p.content,
+        f.file_url AS fileUrl,
+        p.situation,
+        p.category,
+        p.created_at,
+        p.view_count
+        FROM tbl_product p
+        LEFT JOIN tbl_file f ON p.product_no = f.product_no
+        WHERE p.product_no = #{productNo}
+    </select>
+
 </mapper>
