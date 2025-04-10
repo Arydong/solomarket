@@ -1,6 +1,7 @@
 package com.solomarket.controllers.views;
 
 import com.solomarket.security.CustomUserDetails;
+import com.solomarket.service.ProductService;
 import com.solomarket.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final ProductService productService;
 
     @RequestMapping("/loginForm")
     public String lgoinForm() {
@@ -37,7 +39,11 @@ public class UserController {
 
     @RequestMapping("/mypage")
     public String mypage(Model model, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        int userNo = customUserDetails.getUserNo();
         String nickname = customUserDetails.getNickname();
+        int salesCount = productService.getSalesCount(userNo);
+
+        model.addAttribute("salesCount", salesCount);
         model.addAttribute("nickname", nickname);
         return "/user/mypage";
     }

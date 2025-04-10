@@ -27,11 +27,9 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder; // ✅ 암호화기 주입 완료
 
     public int insertUser(UserDto userDto) {
-        // ✅ 비밀번호 암호화
         String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
         userDto.setPassword(encryptedPassword);
 
-        // ✅ 기본값 설정
         userDto.setCreatedAt(LocalDateTime.now());
         userDto.setRole("USER");
         userDto.setUserStatus("Y");
@@ -47,4 +45,17 @@ public class UserService {
     public UserDto findByNickName(String nickName) {
         return userDao.findByNick(nickName);
     }
+
+
+
+//    public int getPurchaseCount(int userId){
+//        return userDao.countPurchasesByUser(userId);
+//    }
+
+//    public double getAvgRating(int userId) {
+//        public double getAvgRating(int userId) {
+//            Double rating = userDao.getAvgRatingByUser(userId);
+//            return rating != null ? rating : 0.0;
+//        }        return rating != null ? rating : 0.0;
+//    }
 }

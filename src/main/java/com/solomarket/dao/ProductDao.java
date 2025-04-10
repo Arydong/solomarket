@@ -25,4 +25,6 @@ public interface ProductDao {
     List<ProductDto> getProductsBySellerId(int sellerId);
 
     ProductDto getProductById(int productNo);
+
+    int countSalesByUser(int userNo);
 }

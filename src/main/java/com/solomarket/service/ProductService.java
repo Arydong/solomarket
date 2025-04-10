@@ -73,4 +73,8 @@ public class ProductService {
     public ProductDto getProductById(int productNo) {
         return productDao.getProductById(productNo);
     }
+
+    public int getSalesCount(int userNo){
+        return productDao.countSalesByUser(userNo);
+    }
 }
