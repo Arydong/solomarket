@@ -64,4 +64,8 @@
         WHERE p.product_no = #{productNo}
     </select>
 
+    <select id="countSalesByUser" parameterType="int" resultType="int">
+        SELECT IFNULL(COUNT(*), 0) FROM tbl_product WHERE seller_id = #{userNo}
+    </select>
+
 </mapper>

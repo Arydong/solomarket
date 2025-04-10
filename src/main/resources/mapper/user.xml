@@ -37,4 +37,7 @@
         #{nickName}, #{email}, #{phone}, #{birth},
         #{createdAt}, #{role}, #{userImage}, #{gender}, 0, 'Y')
     </insert>
+
+
+
 </mapper>

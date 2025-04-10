@@ -38,7 +38,7 @@
             <div class="summary-cards">
                 <div class="summary-card">
                     <h3>판매내역</h3>
-                    <p id="sales-count">0건</p>
+                    <a href="/product/list"><p id="sales-count" th:text="${salesCount + '건'}"></p></a>
                 </div>
                 <div class="summary-card">
                     <h3>구매내역</h3>
