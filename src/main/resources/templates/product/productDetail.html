@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>물품 상세</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/nav.js"></script>
+    <script src="/js/home.js"></script>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="~{/layout/fragment/header :: header}"></div>
+
+<!-- Navigation -->
+<div th:replace="~{/layout/fragment/nav :: nav}"></div>
+
+<!-- Main Content -->
+<main layout:fragment="content">
+    <div class="container">
+        <h1 th:text="${product.title}">상품명</h1>
+        <img th:src="${product.fileUrl}" alt="상품 이미지" style="max-width:300px;">
+        <p><strong>등록일:</strong> <span th:text="${#temporals.format(product.createdAt, 'yyyy-MM-dd')}"></span></p>
+        <p><strong>가격:</strong> <span th:text="${product.price}"></span> 원</p>
+        <p><strong>설명:</strong></p>
+        <p th:text="${product.content}"></p>
+        <p><strong>카테고리:</strong> <span th:text="${product.category}"></span></p>
+
+        <!-- ✅ 본인이 아닐 경우 채팅 버튼 노출 -->
+        <div class="chat-btn-wrapper"
+             th:if="${loginUserNo != null and loginUserNo != product.sellerId}">
+            <form th:action="@{/chat/room}" method="post">
+                <input type="hidden" name="productNo" th:value="${product.productNo}" />
+                <input type="hidden" name="sellerId" th:value="${product.sellerId}" />
+                <button type="submit" class="chat-btn">💬 채팅하기</button>
+            </form>
+        </div>
+
+        <!-- 본인일 경우 안내 문구 -->
+        <div th:if="${loginUserNo != null and loginUserNo == product.sellerId}">
+            <p style="color: gray;">⚠️ 본인의 상품입니다. 채팅이 불가능합니다.</p>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
+</body>
+</html>

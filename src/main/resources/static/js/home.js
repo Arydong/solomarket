@@ -12,8 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             chatLink.addEventListener("click", function (e) {
                 e.preventDefault();
-                // 채팅내역 페이지 URL (예: /chat)로 이동
-                window.location.href = "/chat";
+                window.location.href = "/chat/list";
             });
 
             sellItemLink.addEventListener("click", function (e) {
@@ -58,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const card = document.createElement("div");
                 card.classList.add("product-card");
                 card.innerHTML = `
-                    <img src="${product.fileUrl ? product.fileUrl : '/images/default-product.png'}" alt="${product.title}" style="width: 100%; height: auto;">
+                    <a href="/product/${product.productNo}"><img src="${product.fileUrl ? product.fileUrl : '/images/default-product.png'}" alt="${product.title}" style="width: 100%; height: auto;">
                     <h3>${product.title}</h3>
                     <p>${product.price.toLocaleString()}원</p>
                 `;

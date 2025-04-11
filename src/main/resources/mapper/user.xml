@@ -16,16 +16,16 @@
 
     <select id="findByUserId" resultType="com.solomarket.dto.UserDto">
         SELECT
-            user_id AS userId,
+            user_id,
             password,
             username,
             nickname,
             email,
             phone,
             birth,
-            created_at AS createdAt,
+            created_at,
             role,
-            user_image AS userImage,
+            user_image,
             gender
         FROM tbl_user
         WHERE user_id = #{userId}
@@ -37,7 +37,5 @@
         #{nickName}, #{email}, #{phone}, #{birth},
         #{createdAt}, #{role}, #{userImage}, #{gender}, 0, 'Y')
     </insert>
-
-
 
 </mapper>
