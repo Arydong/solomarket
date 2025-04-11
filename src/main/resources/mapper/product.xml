@@ -18,7 +18,7 @@
         p.title,
         p.price,
         p.content,
-        f.file_url AS fileUrl,
+        f.file_url,
         p.situation,
         p.category,
         p.created_at,
@@ -32,11 +32,11 @@
     <select id="getProductsBySellerId" parameterType="int" resultType="com.solomarket.dto.ProductDto">
         SELECT
         p.product_no AS productNo,
-        p.seller_id AS sellerId,
+        p.seller_id,
         p.title,
         p.price,
         p.content,
-        f.file_url AS fileUrl,
+        f.file_url,
         p.situation,
         p.category,
         p.created_at,
@@ -49,12 +49,12 @@
 
     <select id="getProductById" parameterType="int" resultType="com.solomarket.dto.ProductDto">
         SELECT
-        p.product_no,
+        p.product_no AS productNo,
         p.seller_id,
         p.title,
         p.price,
         p.content,
-        f.file_url AS fileUrl,
+        f.file_url,
         p.situation,
         p.category,
         p.created_at,

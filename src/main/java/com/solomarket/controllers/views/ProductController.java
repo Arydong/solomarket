@@ -39,10 +39,16 @@ public class ProductController {
     }
 
     @GetMapping("/{productNo}")
-    public String getProductDetail(@PathVariable int productNo, Model model) {
+    public String getProductDetail(@PathVariable int productNo, HttpServletRequest request, Model model) {
         ProductDto product = productService.getProductById(productNo);
         model.addAttribute("product", product);
-        return "product/productDetail"; // 👉 productDetail.html
+
+        CustomUserDetails userDetails = (CustomUserDetails) request.getAttribute("user");
+        if (userDetails != null) {
+            model.addAttribute("loginUserNo", userDetails.getUserNo());
+        }
+
+        return "product/productDetail";
     }
 
     @GetMapping("/list")
@@ -54,4 +60,5 @@ public class ProductController {
         model.addAttribute("myProductList", myProducts);
         return "product/productList";
     }
+
 }

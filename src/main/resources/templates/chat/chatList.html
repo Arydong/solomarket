@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅리스트</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chatRoom.css">
+    <script src="/js/nav.js"></script>
+    <script src="/js/home.js"></script>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="~{/layout/fragment/header :: header}"></div>
+
+<!-- Navigation -->
+<div th:replace="~{/layout/fragment/nav :: nav}"></div>
+
+<!-- Main Content -->
+<main layout:fragment="content">
+    <div class="container">
+        <h2>채팅 목록</h2>
+        <div id="chat-list">
+            <div id="chat-room-container"></div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
+<input type="hidden" id="currentUserId" th:value="${userNo}" />
+<input type="hidden" id="nickname" th:value="${nickname}" />
+
+<script src="/js/chatList.js"></script>
+</body>
+</html>

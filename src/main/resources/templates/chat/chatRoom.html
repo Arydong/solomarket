@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>채팅방</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chatRoom.css">
+    <script src="/js/nav.js"></script>
+    <script src="/js/home.js"></script>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container">
+        <div class="chat-container">
+            <h2>채팅방</h2>
+
+            <div id="chat-room-content">
+                <input type="hidden" id="productNo" th:value="${productNo}" />
+                <input type="hidden" id="sellerId" th:value="${sellerId}" />
+                <input type="hidden" id="buyerId" th:value="${buyerId}" />
+                <input type="hidden" id="nickname" th:value="${nickname}" />
+
+                <div id="chat-box" class="chat-box"></div>
+
+                <form id="chat-form" class="chat-form">
+                    <input type="text" id="chat-input" placeholder="메시지를 입력하세요..." autocomplete="off" />
+                    <button type="submit">전송</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/chat.js"></script>
+</body>
+</html>
