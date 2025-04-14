@@ -29,7 +29,6 @@
         <p th:text="${product.content}"></p>
         <p><strong>카테고리:</strong> <span th:text="${product.category}"></span></p>
 
-        <!-- ✅ 본인이 아닐 경우 채팅 버튼 노출 -->
         <div class="chat-btn-wrapper"
              th:if="${loginUserNo != null and loginUserNo != product.sellerId}">
             <form th:action="@{/chat/room}" method="post">

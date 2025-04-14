@@ -12,61 +12,79 @@ const firebaseConfig = {
     measurementId: "G-5DNCC87XV4"
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ chat.js loaded");
 
-// ✅ 요소 및 사용자 정보
-const productNo = document.getElementById("productNo").value;
-const buyerId = parseInt(document.getElementById("buyerId").value); // 숫자 변환 필수!
-const nickname = document.getElementById("nickname").value;
-const chatRoomId = `product-${productNo}`;
-
-const chatBox = document.getElementById("chat-box");
-const chatInput = document.getElementById("chat-input");
-const chatForm = document.getElementById("chat-form");
-
-// ✅ 메시지 전송
-chatForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const message = chatInput.value.trim();
-    if (message === "") return;
-
-    const messageData = {
-        senderId: buyerId,
-        nickname: nickname,
-        message: message,
-        timestamp: Date.now()
-    };
-
-    db.ref(`chats/product-${productNo}`).push(messageData)
-        .then(() => {
-            chatInput.value = "";
-            appendMessageToUI(messageData); // 즉시 화면에 표시
-        })
-        .catch((err) => {
-            console.error("❌ Firebase push 실패:", err);
-            alert("메시지 전송에 실패했습니다.");
-        });
-});
-
-// ✅ 메시지 실시간 수신
-db.ref(`chats/${chatRoomId}`).on("child_added", (data) => {
-    const msg = data.val();
-    appendMessageToUI(msg);
-});
-
-// ✅ 메시지 화면에 출력하는 함수
-function appendMessageToUI(msg) {
-    const msgElem = document.createElement("div");
-    msgElem.classList.add("chat-message");
-
-    if (parseInt(msg.senderId) === buyerId) {
-        msgElem.classList.add("my-message");
-    } else {
-        msgElem.classList.add("their-message");
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
     }
 
-    msgElem.innerHTML = `<strong>${msg.nickname}:</strong> ${msg.message}`;
-    chatBox.appendChild(msgElem);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
+    const db = firebase.database();
+
+    // ✅ 서버에서 넘긴 값들만 읽기
+    const chatRoomId = document.getElementById("chatRoomId").value;
+    const buyerId = parseInt(document.getElementById("buyerId").value);
+    const sellerId = parseInt(document.getElementById("sellerId").value);
+    const nickname = document.getElementById("nickname").value;
+
+    const chatBox = document.getElementById("chat-box");
+    const chatInput = document.getElementById("chat-input");
+    const chatForm = document.getElementById("chat-form");
+
+    // ✅ 기존 메시지 로딩 (딱 1번)
+    db.ref(`chats/${chatRoomId}`).once("value")
+        .then(snapshot => {
+            snapshot.forEach(childSnap => {
+                const msg = childSnap.val();
+                appendMessageToUI(msg);
+            });
+        });
+
+    // ✅ 실시간 수신
+    db.ref(`chats/${chatRoomId}`).on("child_added", (data) => {
+        const msg = data.val();
+        appendMessageToUI(msg);
+    });
+
+    // ✅ 전송 처리
+    chatForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        sendMessage();
+    });
+
+    function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        const messageData = {
+            senderId: buyerId,
+            receiverId: sellerId,
+            buyerId: buyerId,
+            sellerId: sellerId,
+            nickname: nickname,
+            message: message,
+            timestamp: Date.now()
+        };
+
+        db.ref(`chats/${chatRoomId}`).push(messageData)
+            .then(() => {
+                chatInput.value = "";
+            })
+            .catch((err) => {
+                console.error("❌ 메시지 전송 실패:", err);
+                alert("메시지 전송에 실패했습니다.");
+            });
+    }
+
+    function appendMessageToUI(msg) {
+        const msgElem = document.createElement("div");
+        msgElem.classList.add("chat-message");
+
+        const isMyMessage = parseInt(msg.senderId) === buyerId;
+        msgElem.classList.add(isMyMessage ? "my-message" : "their-message");
+
+        msgElem.innerHTML = `<strong>${msg.nickname}:</strong> ${msg.message}`;
+        chatBox.appendChild(msgElem);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+});
