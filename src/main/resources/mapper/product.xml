@@ -32,15 +32,15 @@
     <select id="getProductsBySellerId" parameterType="int" resultType="com.solomarket.dto.ProductDto">
         SELECT
         p.product_no AS productNo,
-        p.seller_id,
+        p.seller_id AS sellerId,
         p.title,
         p.price,
         p.content,
-        f.file_url,
+        f.file_url AS fileUrl,
         p.situation,
         p.category,
-        p.created_at,
-        p.view_count
+        p.created_at AS createdAt,
+        p.view_count AS viewCount
         FROM tbl_product p
         LEFT JOIN tbl_file f ON p.product_no = f.product_no
         WHERE p.seller_id = #{sellerId}

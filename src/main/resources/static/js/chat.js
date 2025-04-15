@@ -13,7 +13,6 @@ const firebaseConfig = {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("✅ chat.js loaded");
 
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
@@ -21,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const db = firebase.database();
 
-    // ✅ 서버에서 넘긴 값들만 읽기
     const chatRoomId = document.getElementById("chatRoomId").value;
     const buyerId = parseInt(document.getElementById("buyerId").value);
     const sellerId = parseInt(document.getElementById("sellerId").value);
@@ -31,22 +29,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const chatInput = document.getElementById("chat-input");
     const chatForm = document.getElementById("chat-form");
 
-    // ✅ 기존 메시지 로딩 (딱 1번)
-    db.ref(`chats/${chatRoomId}`).once("value")
-        .then(snapshot => {
-            snapshot.forEach(childSnap => {
-                const msg = childSnap.val();
-                appendMessageToUI(msg);
-            });
-        });
-
-    // ✅ 실시간 수신
-    db.ref(`chats/${chatRoomId}`).on("child_added", (data) => {
+    // ✅ 중복 방지: 기존 리스너 제거 후 단일 실시간 리스너 등록
+    const chatRef = db.ref(`chats/${chatRoomId}`);
+    chatRef.off();  // 기존 리스너 제거
+    chatRef.on("child_added", (data) => {
         const msg = data.val();
         appendMessageToUI(msg);
     });
 
-    // ✅ 전송 처리
+    // ✅ 메시지 전송 처리
     chatForm.addEventListener("submit", function (e) {
         e.preventDefault();
         sendMessage();
@@ -66,12 +57,12 @@ document.addEventListener("DOMContentLoaded", function () {
             timestamp: Date.now()
         };
 
-        db.ref(`chats/${chatRoomId}`).push(messageData)
+        // ✅ push만 하면 child_added에서 수신되어 UI에 자동 반영됨
+        chatRef.push(messageData)
             .then(() => {
                 chatInput.value = "";
             })
             .catch((err) => {
-                console.error("❌ 메시지 전송 실패:", err);
                 alert("메시지 전송에 실패했습니다.");
             });
     }

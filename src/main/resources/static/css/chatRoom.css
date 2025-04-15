@@ -74,3 +74,12 @@
     cursor: pointer;
     border-bottom-right-radius: 12px;
 }
+
+#chat-list {
+    max-width: 700px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+.chat-room-link:hover {
+    background-color: #f0f0f0 !important;
+}

@@ -8,10 +8,10 @@
     background-color: black;
 }
 
-/* 슬라이더 래퍼: 3장 + 복제본 2장을 포함 */
 .slider {
     display: flex;
     transition: transform 0.5s ease-in-out;
+    width: calc(1400px * 4);
 }
 
 /* 개별 슬라이드 */

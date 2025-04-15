@@ -34,8 +34,12 @@ public class ProductControllerApi {
             @RequestPart(value = "files", required = false) List<MultipartFile> files,
             @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
-        // 로그인한 사용자의 ID를 sellerId에 할당합니다.
+        System.out.println("🔥 로그인 유저 ID: " + customUserDetails.getUserNo());
+        System.out.println("🔥 받은 DTO 초기값: " + productDTO);
+
         productDTO.setSellerId(customUserDetails.getUserNo());
+        System.out.println("🔥 DTO에 셋팅 후 sellerId: " + productDTO.getSellerId());
+
         productService.registerProductWithFiles(productDTO, files);
         return ResponseEntity.ok("물품이 등록되었습니다.");
     }

@@ -56,7 +56,6 @@ public class ChatController {
 
         String chatRoomId = "product-" + productNo + "-buyer-" + small + "-seller-" + big;
 
-        // ✅ 여기서 파라미터를 안전하게 붙임
         redirectAttributes.addAttribute("productNo", productNo);
         redirectAttributes.addAttribute("chatRoomId", chatRoomId);
         redirectAttributes.addAttribute("sellerId", sellerId);

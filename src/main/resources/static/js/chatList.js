@@ -20,7 +20,6 @@ const currentNickname = document.getElementById("nickname")?.value;
 const chatListContainer = document.getElementById("chat-list");
 
 if (!currentUserId || !chatListContainer) {
-    console.error("❌ 사용자 정보 또는 채팅 리스트 컨테이너가 없습니다.");
 }
 
 const chatRoomsRef = db.ref("chats");
@@ -41,15 +40,32 @@ chatRoomsRef.once("value", (snapshot) => {
 
         const productNo = chatRoomId.split("-")[1];
         const sellerId = lastMessage.senderId;
+        const chatRoomIdFinal = `product-${productNo}-buyer-${Math.min(currentUserId, sellerId)}-seller-${Math.max(currentUserId, sellerId)}`;
 
         const chatItem = document.createElement("div");
         chatItem.classList.add("chat-item");
         chatItem.innerHTML = `
-            <a href="/chat/room?productNo=${productNo}&sellerId=${sellerId}" class="chat-room-link">
-                <strong>${lastMessage.nickname}</strong><br>
-                <span>${lastMessage.message}</span>
-            </a>
-        `;
+  <a href="/chat/room?productNo=${productNo}&sellerId=${sellerId}&chatRoomId=${chatRoomId}" 
+     class="chat-room-link" 
+     style="
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 16px;
+        background-color: #f9f9f9;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+        color: #333;
+        transition: background-color 0.2s;
+     "
+     onmouseover="this.style.backgroundColor='#f0f0f0'"
+     onmouseout="this.style.backgroundColor='#f9f9f9'">
+     
+     <div style="font-weight: bold; font-size: 18px;">${lastMessage.nickname}</div>
+     <div style="font-size: 14px; color: #666;">${lastMessage.message}</div>
+  </a>
+`;
         chatListContainer.appendChild(chatItem);
     });
 });
