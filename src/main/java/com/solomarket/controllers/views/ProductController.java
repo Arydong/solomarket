@@ -52,8 +52,7 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public String getMyProductList(HttpServletRequest request, Model model) {
-        CustomUserDetails userDetails = (CustomUserDetails) request.getAttribute("user"); // ✅ 이게 맞음!
+    public String getMyProductList(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         int sellerId = userDetails.getUserNo();
 
         List<ProductDto> myProducts = productService.getProductsBySellerId(sellerId);

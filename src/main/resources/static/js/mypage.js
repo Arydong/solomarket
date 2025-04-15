@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
         .catch(function (err) {
-            console.error("유저 정보를 불러오지 못했습니다!!", err);
         });
 });
 
@@ -37,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
             axios.post("/api/user/upload-profile", formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             }).then(response => {
-                console.log("업로드 성공:", response.data);
             }).catch(error => {
                 alert("업로드 실패!!");
             });

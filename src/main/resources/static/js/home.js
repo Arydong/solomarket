@@ -65,7 +65,53 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         })
         .catch(function(error) {
-            console.error("최신 상품 조회 실패", error);
             productGrid.innerHTML = "<p>최신 상품을 불러오지 못했습니다.</p>";
         });
+
+    const slider = document.querySelector(".slider");
+    const slides = document.querySelectorAll(".slide");
+    const prevBtn = document.querySelector(".prev-btn");
+    const nextBtn = document.querySelector(".next-btn");
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+    const slideWidth = 1400;
+
+    function goToSlide(index) {
+        slider.style.transition = "transform 0.5s ease-in-out";
+        slider.style.transform = `translateX(-${index * slideWidth}px)`;
+        currentIndex = index;
+    }
+
+    function nextSlide() {
+        if (currentIndex < totalSlides - 1) {
+            goToSlide(currentIndex + 1);
+        } else {
+            goToSlide(totalSlides - 1);
+            setTimeout(() => {
+                slider.style.transition = "none";
+                slider.style.transform = "translateX(0)";
+                currentIndex = 0;
+            }, 500);
+        }
+    }
+
+    nextBtn.addEventListener("click", nextSlide);
+    prevBtn.addEventListener("click", () => {
+        if (currentIndex === 0) {
+            slider.style.transition = "none";
+            slider.style.transform = `translateX(-${(totalSlides - 1) * slideWidth}px)`;
+            currentIndex = totalSlides - 1;
+            setTimeout(() => {
+                slider.style.transition = "transform 0.5s ease-in-out";
+                goToSlide(currentIndex - 1);
+            }, 20);
+        } else {
+            goToSlide(currentIndex - 1);
+        }
+    });
+
+    setInterval(() => {
+        nextSlide();
+    }, 3000);
 });

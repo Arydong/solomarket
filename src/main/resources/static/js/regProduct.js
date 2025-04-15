@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 window.location.href = "/";
             })
             .catch(error => {
-                console.error("등록 오류:", error);
                 alert("등록 중 오류가 발생했습니다.");
             });
     });
