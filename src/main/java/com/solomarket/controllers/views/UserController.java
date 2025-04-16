@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -46,6 +47,21 @@ public class UserController {
         model.addAttribute("salesCount", salesCount);
         model.addAttribute("nickname", nickname);
         return "/user/mypage";
+    }
+
+    @GetMapping("/findIdByPhoneForm")
+    public String findIdPage() {
+        return "/user/findIdForm";
+    }
+
+    @GetMapping("/findPwByPhoneForm")
+    public String findPwPage() {
+        return "/user/findPwForm";
+    }
+
+    @GetMapping("/update")
+    public String updateForm() {
+        return "/user/updateForm";
     }
 
 }

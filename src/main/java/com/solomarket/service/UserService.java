@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * packageName    : com.solomarket.service
@@ -46,16 +47,41 @@ public class UserService {
         return userDao.findByNick(nickName);
     }
 
+    // ✅ [1] 이름 + 전화번호로 아이디 찾기
+    public String findUserIdByNameAndPhone(String userName, String phone) {
+        UserDto user = userDao.findByNameAndPhone(userName, phone);
+        return user != null ? user.getUserId() : null;
+    }
 
+    // ✅ [2] 아이디 + 전화번호 일치 시, 임시 비밀번호 발급 후 저장
+    public boolean verifyUserAndSendTempPassword(String userId, String phone) {
+        UserDto user = userDao.findByIdAndPhone(userId, phone);
+        if (user == null) return false;
 
-//    public int getPurchaseCount(int userId){
-//        return userDao.countPurchasesByUser(userId);
-//    }
+        String tempPassword = generateTempPassword(); // 예: "aB12cD34"
+        String encodedPassword = passwordEncoder.encode(tempPassword);
 
-//    public double getAvgRating(int userId) {
-//        public double getAvgRating(int userId) {
-//            Double rating = userDao.getAvgRatingByUser(userId);
-//            return rating != null ? rating : 0.0;
-//        }        return rating != null ? rating : 0.0;
-//    }
+        // DB에 새 비밀번호 저장
+        user.setPassword(encodedPassword);
+        userDao.updatePassword(user);
+
+        // TODO: 문자나 이메일로 임시 비밀번호 전송 로직 추가 가능
+
+        System.out.println("임시 비밀번호: " + tempPassword); // 테스트용 출력
+
+        return true;
+    }
+
+    // ✅ 임시 비밀번호 생성 함수
+    private String generateTempPassword() {
+        return UUID.randomUUID().toString().substring(0, 8);
+    }
+
+    public boolean updateUserNickAndPassword(UserDto userDto) {
+        if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+            String encoded = passwordEncoder.encode(userDto.getPassword());
+            userDto.setPassword(encoded);
+        }
+        return userDao.updateUserNickAndPassword(userDto) > 0;
+    }
 }

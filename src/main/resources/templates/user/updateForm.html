@@ -3,19 +3,22 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title>마이페이지</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/mypage.css">
+    <title>개인정보 수정</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
     <script src="/js/nav.js"></script>
     <script src="/js/home.js"></script>
-    <script src="/js/mypage.js" defer></script>
 </head>
 <body>
+
+<!-- Header -->
 <div th:replace="~{/layout/fragment/header :: header}"></div>
+
+<!-- Navigation -->
 <div th:replace="~{/layout/fragment/nav :: nav}"></div>
 
+<!-- Main Content -->
 <div class="layout-wrapper">
     <!-- Aside 영역 -->
     <aside layout:fragment="aside">
@@ -31,25 +34,35 @@
         <div class="container">
             <div class="profile-box">
                 <div class="profile-info">
-                    <h2 th:text="${nickname} + '님의 페이지입니다.'"></h2>
+                    <h2>개인정보 수정</h2>
                 </div>
             </div>
 
             <div class="summary-cards">
-                <div class="summary-card">
-                    <h3>판매내역</h3>
-                    <a href="/product/list"><p id="sales-count" th:text="${salesCount + '건'}"></p></a>
-                </div>
-                <div class="summary-card">
-                    <h3>평점</h3>
-                    <p id="rating">0점</p>
+                <div class="summary-card" style="width: 100%;">
+                    <form id="updateForm">
+                        <label for="nickName">닉네임</label>
+                        <input type="text" id="nickName" name="nickName" required><br><br>
+
+                        <label for="password">새 비밀번호</label>
+                        <input type="password" id="password" name="password"><br><br>
+
+                        <label for="passwordConfirm">비밀번호 확인</label>
+                        <input type="password" id="passwordConfirm" name="passwordConfirm"><br><br>
+
+                        <button type="button" onclick="updateUserInfo()">수정하기</button>
+                    </form>
+                    <div id="update-result" style="margin-top: 10px;"></div>
                 </div>
             </div>
         </div>
     </main>
 </div>
 
+<!-- Footer -->
 <div th:replace="~{/layout/fragment/footer :: footer}"></div>
-<div layout:fragment="scripts"></div>
+<div layout:fragment="scripts">
+    <script src="/js/update.js"></script>
+</div>
 </body>
 </html>
