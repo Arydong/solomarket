@@ -54,9 +54,7 @@ public class UserControllerApi {
 
     @PostMapping("/find-id")
     public ResponseEntity<String> findId(@RequestBody UserDto dto) {
-        System.out.println("🔥🔥🔥 findId API hit"); // 로그 추가
         String result = userService.findUserIdByNameAndPhone(dto.getUserName(), dto.getPhone());
-        System.out.println("🔥🔥🔥 findId API hit"); // 로그 추가
         if (result != null) {
             return ResponseEntity.ok(result);
         } else {

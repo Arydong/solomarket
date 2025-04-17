@@ -68,4 +68,37 @@
         SELECT IFNULL(COUNT(*), 0) FROM tbl_product WHERE seller_id = #{userNo}
     </select>
 
+    <delete id="deleteProduct" parameterType="int">
+        DELETE FROM tbl_product WHERE product_no = #{productNo}
+    </delete>
+
+    <update id="updateProduct" parameterType="com.solomarket.dto.ProductDto">
+        UPDATE tbl_product SET
+        title = #{title},
+        price = #{price},
+        content = #{content},
+        category = #{category},
+        situation = #{situation},
+        created_at = NOW()
+        WHERE product_no = #{productNo}
+    </update>
+
+    <select id="searchProduct" parameterType="string" resultType="com.solomarket.dto.ProductDto">
+        SELECT
+        p.product_no,
+        p.seller_id,
+        p.title,
+        p.price,
+        p.content,
+        f.file_url,
+        p.situation,
+        p.category,
+        p.created_at,
+        p.view_count
+        FROM tbl_product p
+        LEFT JOIN tbl_file f ON p.product_no = f.product_no
+        WHERE p.title LIKE CONCAT('%', #{keyword}, '%')
+        OR p.content LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
 </mapper>

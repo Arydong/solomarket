@@ -3,9 +3,11 @@ package com.solomarket.service;
 import com.solomarket.dto.FileDto;
 import com.solomarket.entity.FileEntity;
 import com.solomarket.repository.FileRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,4 +64,19 @@ public class FileService {
                 .sortOrder(dto.getSortOrder())
                 .build();
     }
+    @Transactional
+    public void deleteFilesByProductNo(int productNo) {
+        List<FileEntity> fileEntities = fileRepository.findByProductNo(productNo);
+
+        for (FileEntity file : fileEntities) {
+            File storedFile = new File("C:/upload/product/" + file.getFileName());
+            if (storedFile.exists()) {
+                storedFile.delete();
+            }
+        }
+
+        fileRepository.deleteByProductNo(productNo);
+    }
+
+
 }

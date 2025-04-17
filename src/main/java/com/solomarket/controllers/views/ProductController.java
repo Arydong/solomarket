@@ -4,6 +4,7 @@ import com.solomarket.dto.ProductDto;
 import com.solomarket.dto.UserDto;
 import com.solomarket.security.CustomUserDetails;
 import com.solomarket.service.ProductService;
+import com.solomarket.service.WishlistService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
+    private final WishlistService wishlistService;
 
     @GetMapping("/reg")
     public String reg() {
@@ -46,10 +48,17 @@ public class ProductController {
         CustomUserDetails userDetails = (CustomUserDetails) request.getAttribute("user");
         if (userDetails != null) {
             model.addAttribute("loginUserNo", userDetails.getUserNo());
+
+            // ⭐ 추가: 로그인한 유저가 이 상품을 찜했는지 조회
+            boolean isWished = wishlistService.isWished(userDetails.getUserNo(), productNo);
+            model.addAttribute("isWished", isWished);
+        } else {
+            model.addAttribute("isWished", false);  // 로그인 안 했으면 기본 false
         }
 
         return "product/productDetail";
     }
+
 
     @GetMapping("/list")
     public String getMyProductList(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
@@ -58,6 +67,32 @@ public class ProductController {
         List<ProductDto> myProducts = productService.getProductsBySellerId(sellerId);
         model.addAttribute("myProductList", myProducts);
         return "product/productList";
+    }
+
+    @PostMapping("/delete")
+    public String deleteProduct(@RequestParam("productNo") int productNo) {
+        productService.deleteProductById(productNo);
+        return "redirect:/product/list";
+    }
+
+    @GetMapping("/update")
+    public String updateForm(@RequestParam int productNo, Model model) {
+        ProductDto product = productService.getProductById(productNo);
+        model.addAttribute("product", product);
+        return "/product/updateProduct";
+    }
+
+    @PostMapping("/update")
+    public String updateProduct(ProductDto productDto) {
+        productService.updateProduct(productDto);
+        return "redirect:/product/list";
+    }
+
+    @GetMapping("/search")
+    public String searchProducts(@RequestParam("keyword") String keyword, Model model) {
+        List<ProductDto> searchResults = productService.searchProducts(keyword);
+        model.addAttribute("products", searchResults);
+        return "/product/searchResult";
     }
 
 }

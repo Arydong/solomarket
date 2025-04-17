@@ -11,7 +11,7 @@ function updateUserInfo() {
     axios.put("/api/user/update", { nickName, password })
         .then(res => {
             alert("수정되었습니다.");
-            window.location.href = "/user/mypage";  // ✅ 성공 시 이동
+            window.location.href = "/user/mypage";
         })
         .catch(err => {
             document.getElementById("update-result").innerText = "수정 실패!";

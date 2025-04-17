@@ -65,10 +65,6 @@ public class UserService {
         user.setPassword(encodedPassword);
         userDao.updatePassword(user);
 
-        // TODO: 문자나 이메일로 임시 비밀번호 전송 로직 추가 가능
-
-        System.out.println("임시 비밀번호: " + tempPassword); // 테스트용 출력
-
         return true;
     }
 

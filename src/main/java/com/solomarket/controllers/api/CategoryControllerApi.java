@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/category")
-public class CategoryController {
+public class CategoryControllerApi {
 
     @GetMapping
     public ResponseEntity<Map<String, List<String>>> getCategories() {
