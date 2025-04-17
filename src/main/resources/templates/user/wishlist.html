@@ -3,21 +3,20 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title>마이페이지</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/mypage.css">
+    <title>찜한 상품 목록</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/wishlist.css">
     <script src="/js/nav.js"></script>
-    <script src="/js/home.js"></script>
-    <script src="/js/mypage.js" defer></script>
+    <script src="/js/productList.js"></script>
 </head>
 <body>
+
 <div th:replace="~{/layout/fragment/header :: header}"></div>
 <div th:replace="~{/layout/fragment/nav :: nav}"></div>
 
 <div class="layout-wrapper">
-    <!-- Aside 영역 -->
     <aside layout:fragment="aside">
         <div>
             <a href="/user/mypage">내 정보</a><br>
@@ -27,30 +26,27 @@
         </div>
     </aside>
 
-    <!-- 본문 영역 -->
     <main layout:fragment="content">
         <div class="container">
-            <div class="profile-box">
-                <div class="profile-info">
-                    <h2 th:text="${nickname} + '님의 페이지입니다.'"></h2>
+            <h1>찜한 상품 목록</h1>
+
+            <div class="product-grid">
+                <div class="product-card" th:each="product : ${wishlist}">
+                    <a th:href="@{'/product/' + ${product.productNo}}">
+                        <img th:src="${product.fileUrl}" alt="상품 이미지" style="max-width: 200px; height: 200px; object-fit: cover;">
+                        <h3 th:text="${product.title}">상품명</h3>
+                        <p th:text="${product.price} + ' 원'">가격</p>
+                    </a>
                 </div>
             </div>
 
-            <div class="summary-cards">
-                <div class="summary-card">
-                    <h3>판매내역</h3>
-                    <a href="/product/list"><p id="sales-count" th:text="${salesCount + '건'}"></p></a>
-                </div>
-                <div class="summary-card">
-                    <h3>평점</h3>
-                    <p id="rating">0점</p>
-                </div>
-            </div>
         </div>
     </main>
 </div>
 
 <div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
 <div layout:fragment="scripts"></div>
+
 </body>
 </html>

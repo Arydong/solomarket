@@ -27,4 +27,10 @@ public interface ProductDao {
     ProductDto getProductById(int productNo);
 
     int countSalesByUser(int userNo);
+
+    void deleteProduct(int productNo);
+
+    void updateProduct(ProductDto productDto);
+
+    List<ProductDto> searchProduct(String keyword);
 }

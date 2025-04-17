@@ -21,10 +21,8 @@ public class ProductService {
     private final FileRepository fileRepository;
 
     public void registerProductWithFiles(ProductDto productDto, List<MultipartFile> files) {
-        // sellerId는 Controller에서 동적으로 세팅되어 있다고 가정합니다.
-        productDao.insertProduct(productDto); // DB 등록 후 productNo 생성됨
+        productDao.insertProduct(productDto);
 
-        // Windows의 C 드라이브의 upload/product 폴더를 업로드 디렉토리로 사용합니다.
         String uploadDir = "C:/upload/product/"; // 경로 구분자는 슬래시(/)를 사용합니다.
 
         if (files != null && !files.isEmpty()) {
@@ -76,5 +74,17 @@ public class ProductService {
 
     public int getSalesCount(int userNo){
         return productDao.countSalesByUser(userNo);
+    }
+
+    public void deleteProductById(int productNo) {
+        productDao.deleteProduct(productNo);
+    }
+
+    public void updateProduct(ProductDto productDto) {
+        productDao.updateProduct(productDto);
+    }
+
+    public List<ProductDto> searchProducts(String keyword) {
+        return productDao.searchProduct(keyword);
     }
 }

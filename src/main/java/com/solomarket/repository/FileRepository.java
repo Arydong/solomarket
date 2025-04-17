@@ -18,4 +18,5 @@ import java.util.List;
  */
 public interface FileRepository extends JpaRepository<FileEntity, Integer> {
     List<FileEntity> findByProductNo(int productNo);
+    int deleteByProductNo(int productNo);
 }

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>물품 수정</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/product.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/nav.js"></script>
+    <script src="/js/home.js"></script>
+    <script src="/js/updateProduct.js"></script>
+</head>
+<body>
+
+<div th:replace="~{/layout/fragment/header :: header}"></div>
+<div th:replace="~{/layout/fragment/nav :: nav}"></div>
+
+<div class="layout-wrapper">
+    <main layout:fragment="content">
+        <h1 style="text-align: center">물품 수정</h1>
+
+        <div class="container">
+            <form id="productForm" enctype="multipart/form-data">
+
+                <input type="hidden" name="productNo" th:value="${product.productNo}" />
+                <input type="text" name="title" placeholder="제목" th:value="${product.title}" required>
+                <select name="situation" required>
+                    <option value="Y" th:selected="${product.situation == 'Y'}">판매중</option>
+                    <option value="W" th:selected="${product.situation == 'W'}">예약중</option>
+                    <option value="P" th:selected="${product.situation == 'P'}">거래종료</option>
+                </select>
+                <input type="number" name="price" placeholder="가격" th:value="${product.price}" required>
+                <input type="file" name="files" multiple>
+
+                <textarea name="content" placeholder="설명" required th:text="${product.content}"></textarea>
+
+                <select id="mainCategory" name="mainCategory" required>
+                    <option value="" disabled>대분류 선택</option>
+                    <option value="office" th:selected="${product.category == 'office'}">사무용</option>
+                    <option value="gaming" th:selected="${product.category == 'gaming'}">게이밍</option>
+                    <option value="outer" th:selected="${product.category == 'outer'}">휴대용</option>
+                </select>
+
+                <select name="category" id="subCategory" required>
+                    <option value="" disabled selected>소분류 선택</option>
+                </select>
+
+                <br>
+                <button type="submit">수정 완료</button>
+            </form>
+        </div>
+
+    </main>
+</div>
+
+<div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
+<script>
+    const categories = {
+        office: ["멤브레인", "기계식", "무접점", "로우프로파일", "펜타그래프", "기타"],
+        gaming: ["멤브레인", "기계식", "무접점", "자석축", "로우프로파일", "펜타그래프", "기타"],
+        outer: ["휴대용 키보드", "미니 키보드", "블루트스 키보드", "속기 키보드", "기타"]
+    };
+
+    const mainCategory = document.getElementById("mainCategory");
+    const subCategory = document.getElementById("subCategory");
+
+    mainCategory.addEventListener("change", function () {
+        const selected = this.value;
+        const subOptions = categories[selected] || [];
+
+        subCategory.innerHTML = '<option value="" disabled selected>소분류 선택</option>';
+
+        subOptions.forEach(function (subcategory) {
+            const option = document.createElement("option");
+            option.value = subcategory;
+            option.textContent = subcategory;
+            subCategory.appendChild(option);
+        });
+    });
+</script>
+</body>
+</html>
