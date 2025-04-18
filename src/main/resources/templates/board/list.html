@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 목록</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/boardList.css">
+    <script src="/js/nav.js"></script>
+    <script src="/js/home.js"></script>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="~{/layout/fragment/header :: header}"></div>
+
+<!-- Navigation -->
+<div th:replace="~{/layout/fragment/nav :: nav}"></div>
+
+<!-- Main Content -->
+<main layout:fragment="content">
+    <div class="container">
+        <h1>게시판 목록</h1>
+        <div id="btn-container">
+            <button id="write-btn" type="button">글쓰기</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>순번</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>작성일자</th>
+                    <th>조회수</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="board : ${boardList}">
+                    <td th:text="${board.boardId}">1</td>
+                    <td>
+                        <a th:href="@{/board/detail/{boardId}(boardId=${board.boardId})}" th:text="${board.title}"></a>
+                    </td>
+                    <td th:text="${board.nickname}">닉네임</td>
+                    <td th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}">작성일자</td>
+                    <td th:text="${board.viewCount}">조회수</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{/layout/fragment/footer :: footer}"></div>
+<script th:inline="javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        const writeBtn = document.getElementById("write-btn");
+        const loginUserNo = /*[[${loginUserNo}]]*/ null;
+
+        writeBtn.addEventListener("click", function () {
+            if (loginUserNo === null) {
+                alert("로그인이 필요합니다.");
+            } else {
+                window.location.href = "/board/add";
+            }
+        });
+    });
+</script>
+</body>
+</html>

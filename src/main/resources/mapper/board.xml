@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solomarket.dao.BoardDao">
+    <select id="getBoardList" parameterType="com.solomarket.dto.BoardDto" resultType="com.solomarket.dto.BoardDto">
+        SELECT
+            b.board_id,
+            b.title,
+            u.nickname,
+            b.created_at,
+            b.view_count
+        FROM tbl_board b
+        LEFT JOIN tbl_user u ON b.user_no = u.user_no
+    </select>
+
+    <select id="getBoardById" resultType="com.solomarket.dto.BoardDto">
+        SELECT
+            b.board_id,
+            b.title,
+            b.content,
+            u.nickname,
+            b.view_count,
+            b.created_at,
+            b.user_no,
+            b.like_count
+        FROM tbl_board b
+        LEFT JOIN tbl_user u ON b.user_no = u.user_no
+        WHERE b.board_id = #{boardId}
+    </select>
+
+    <update id="increaseViewCount" parameterType="int">
+        UPDATE tbl_board
+        SET view_count = view_count + 1
+        WHERE board_id = #{boardId}
+    </update>
+
+    <insert id="addBoard" parameterType="com.solomarket.dto.BoardDto">
+        INSERT INTO tbl_board(user_no, title, content, view_count, created_at, like_count) VALUES
+        (#{userNo}, #{title}, #{content}, 0, NOW(), 0)
+    </insert>
+
+    <update id="updateBoard" parameterType="com.solomarket.dto.BoardDto">
+        UPDATE tbl_board
+        SET title = #{title},
+        content = #{content}
+        WHERE board_id = #{boardId}
+    </update>
+
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM tbl_board
+        WHERE board_id = #{boardId}
+    </delete>
+</mapper>
