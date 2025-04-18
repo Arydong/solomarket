@@ -3,6 +3,8 @@ package com.solomarket.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * packageName    : com.solomarket.dto
@@ -20,8 +22,10 @@ public class CommentDto {
     private int commentId;
     private int boardId;
     private int userNo;
-    private int parentId;
+    private Integer parentId;
     private String content;
     private LocalDateTime createdAt;
-
+    private String nickname;
+    private int depth; // 들여쓰기 레벨
+    private List<CommentDto> children = new ArrayList<>();
 }

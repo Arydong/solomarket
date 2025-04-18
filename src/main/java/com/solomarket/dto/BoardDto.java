@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 public class BoardDto {
     private int boardId;
     private int userNo;
+    private String nickname;
     private String title;
     private String content;
     private int viewCount;
     private LocalDateTime createdAt;
-    private String category;
     private int likeCount;
 }

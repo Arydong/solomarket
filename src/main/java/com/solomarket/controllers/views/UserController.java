@@ -71,11 +71,11 @@ public class UserController {
 
     @GetMapping("/wishlist")
     public String wishlist(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-        int userNo = userDetails.getUserNo(); // 로그인한 유저 번호 가져오기
+        int userNo = userDetails.getUserNo();
         List<ProductDto> wishlist = wishlistService.getWishlistProducts(userNo); // 찜한 상품 조회
 
         model.addAttribute("wishlist", wishlist); // 모델에 담기
-        return "/user/wishlist"; // templates/user/wishlist.html
+        return "/user/wishlist";
     }
 
 }
