@@ -54,9 +54,6 @@
                     </form>
                 </div>
 
-                <div th:if="${loginUserNo == null}">
-                    <p>댓글 작성은 로그인 후 이용하실 수 있습니다.</p>
-                </div>
                 <div th:each="comment : ${commentTree}">
                     <div style="margin-left: [[${comment.depth}]]0px;">
                         <p>
@@ -65,9 +62,11 @@
                                   style="font-weight:bold; color:blue;">(작성자)</span>
                             : <span th:text="${comment.content}"></span>
                             <small th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
-                            <button type="button" class="reply-btn" th:data-comment-id="${comment.commentId}">답글
+                            <button type="button" class="reply-btn"
+                                    th:if="${loginUserNo != null}"
+                                    th:data-comment-id="${comment.commentId}">
+                                답글
                             </button>
-
                             <button type="button" class="delete-btn"
                                     th:if="${loginUserNo == comment.userNo}"
                                     th:data-comment-id="${comment.commentId}"
