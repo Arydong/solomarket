@@ -37,11 +37,11 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/view/loginForm",
-                                "/view/findIdByPhoneForm",
-                                "/view/findIdByEmailForm",
-                                "/view/findPwByPhoneForm",
-                                "/view/findPwByEmailForm",
+                                "/user/loginForm",
+                                "/user/findIdByPhoneForm",
+                                "/user/findIdByEmailForm",
+                                "/user/findPwByPhoneForm",
+                                "/user/findPwByEmailForm",
                                 "/login",
                                 "/logout",
                                 "/css/**",
@@ -52,12 +52,23 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/api/file/upload"
                         ).permitAll()
-                        .anyRequest().permitAll() // 👉 추후에 권한 설정 추가 가능
+                        .requestMatchers(
+                                "/user/mypage",
+                                "/board/add",
+                                "/chat/**",
+                                "/product/reg",
+                                "/product/add",
+                                "/product/update",
+                                "/product/delete",
+                                "/inquiry/inquiry"
+                        ).authenticated() // ✅ 여기는 로그인 필요!
+                        .anyRequest().permitAll() // 나머지는 일단 열어놓기
                 )
                 .formLogin(form -> form
-                        .loginPage("/view/loginForm")
+                        .loginPage("/user/loginForm")
                         .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/")
+                        .failureHandler(new CustomAuthenticationFailureHandler())
                         .successHandler(new CustomAuthenticationSuccessHandler(jwtTokenProvider)) // ✅ JWT 쿠키 발급
                         .permitAll()
                 )

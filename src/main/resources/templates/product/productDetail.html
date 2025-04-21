@@ -34,6 +34,13 @@
                 th:attr="data-product-no=${product.productNo}">
             <span id="wishlist-icon" th:text="${isWished} ? '❤️' : '🤍'"></span>
         </button>
+        <p><strong>판매자 : </strong><span th:text="${product.nickname}"></span></p>
+        <button type="button" class="report-btn"
+                th:if="${loginUserNo != null}"
+                th:data-user-no="${product.sellerId}"
+                onclick="reportUser(this)">
+            신고
+        </button>
         <p><strong>등록일:</strong> <span th:text="${#temporals.format(product.createdAt, 'yyyy-MM-dd')}"></span></p>
         <p><strong>가격:</strong> <span th:text="${product.price}"></span> 원</p>
         <p><strong>설명:</strong></p>
@@ -97,6 +104,22 @@
                 });
         });
     });
+    function reportUser(button) {
+        const reportedUserNo = button.getAttribute('data-user-no');
+
+        if (confirm('이 사용자를 신고하시겠습니까?')) {
+            axios.post('/report/user', {
+                userNo: reportedUserNo
+            })
+                .then(response => {
+                    alert('신고가 접수되었습니다.');
+                    location.reload();
+                })
+                .catch(error => {
+                    alert('신고 실패: ' + error.response.data);
+                });
+        }
+    }
 </script>
 </body>
 </html>

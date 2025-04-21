@@ -27,4 +27,8 @@ public interface UserDao {
     int updatePassword(UserDto userDto); // 비밀번호 변경용
     int updateUserNickAndPassword(UserDto userDto);
 
+    void incrementReportCount(int userNo);
+    int getReportCount(int userNo);
+    void deactivateUser(int userNo);
+
 }

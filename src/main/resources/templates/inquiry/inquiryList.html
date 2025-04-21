@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>1:1 문의</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/nav.js"></script>
+    <script src="/js/home.js"></script>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="~{/layout/fragment/header :: header}"></div>
+
+<!-- Navigation -->
+<div th:replace="~{/layout/fragment/nav :: nav}"></div>
+
+<!-- Main Content -->
+<main layout:fragment="content">
+    <div class="container">
+        <h1>1:1 문의함임</h1>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
+</body>
+</html>

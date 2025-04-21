@@ -32,6 +32,10 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found: " + userId);
         }
 
+        if ("N".equals(userDto.getUserStatus())) {
+            throw new UsernameNotFoundException("로그인이 제한된 사용자입니다.");
+        }
+
         // ✅ CustomUserDetails 객체로 변환해서 리턴!
         return new CustomUserDetails(
                 userDto.getUserNo(),

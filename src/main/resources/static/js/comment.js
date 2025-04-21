@@ -1,7 +1,3 @@
-// comment.js
-
-// DOM 로딩 완료되면 실행
-
 document.addEventListener("DOMContentLoaded", function () {
     const boardId = document.getElementById("boardId")?.value;
 
@@ -112,6 +108,23 @@ function deleteComment(button) {
             })
             .catch(error => {
                 alert('삭제 실패: ' + error.response.data);
+            });
+    }
+}
+
+function reportUser(button) {
+    const reportedUserNo = button.getAttribute('data-user-no');
+
+    if (confirm('이 사용자를 신고하시겠습니까?')) {
+        axios.post('/report/user', {
+            userNo: reportedUserNo
+        })
+            .then(response => {
+                alert('신고가 접수되었습니다.');
+                location.reload();
+            })
+            .catch(error => {
+                alert('신고 실패: ' + error.response.data);
             });
     }
 }
