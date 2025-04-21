@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/inquiryList.css">
     <script src="/js/nav.js"></script>
     <script src="/js/home.js"></script>
 </head>
@@ -19,12 +20,45 @@
 <div th:replace="~{/layout/fragment/nav :: nav}"></div>
 
 <!-- Main Content -->
+
 <main layout:fragment="content">
-    <div class="container">
-        <h1>1:1 문의함임</h1>
+    <div class="inquiry-container">
+        <div class="inquiry-header">
+            <h1>1:1 문의</h1>
+            <form action="/inquiry/inquiry" method="post">
+                <button type="submit">문의하기</button>
+            </form>
+        </div>
+
+        <table class="inquiry-table">
+            <thead>
+            <tr>
+                <th>제목</th>
+                <th>등록일</th>
+                <th>상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="inquiry : ${inquiryList}">
+                <td>
+                    <a th:href="@{/inquiry/detail/{inquiryId}(inquiryId=${inquiry.inquiryId})}"
+                       th:text="${inquiry.title}" style="text-decoration: none; color: #333;">
+                    </a>
+                </td>
+                <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd')}"></td>
+                <td>
+                    <span th:if="${inquiry.status == 'W'}" class="status-badge status-W">접수됨</span>
+                    <span th:if="${inquiry.status == 'R'}" class="status-badge status-R">읽음</span>
+                    <span th:if="${inquiry.status == 'S'}" class="status-badge status-S">완료</span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(inquiryList)}">
+                <td colspan="3" style="text-align: center; padding: 30px;">문의 내역이 없습니다.</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </main>
-
 <!-- Footer -->
 <div th:replace="~{/layout/fragment/footer :: footer}"></div>
 

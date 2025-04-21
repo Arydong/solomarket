@@ -1,0 +1,71 @@
+
+.inquiry-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.inquiry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.inquiry-header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #222;
+}
+
+.inquiry-header button {
+    padding: 8px 18px;
+    background-color: #666;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.inquiry-header button:hover {
+    background-color: #555;
+}
+
+.inquiry-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.inquiry-table th, .inquiry-table td {
+    padding: 14px;
+    text-align: center;
+    font-size: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.inquiry-table th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+}
+
+.inquiry-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #fff;
+}
+
+.status-W { background-color: #777; }
+.status-R { background-color: #999; }
+.status-S { background-color: #bbb; }
