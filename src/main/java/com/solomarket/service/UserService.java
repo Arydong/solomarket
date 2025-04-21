@@ -5,6 +5,7 @@ import com.solomarket.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -80,4 +81,15 @@ public class UserService {
         }
         return userDao.updateUserNickAndPassword(userDto) > 0;
     }
+
+    @Transactional
+    public void reportUser(int userNo) {
+        userDao.incrementReportCount(userNo);
+
+        int reportCount = userDao.getReportCount(userNo);
+        if (reportCount >= 20) {
+            userDao.deactivateUser(userNo);
+        }
+    }
+
 }

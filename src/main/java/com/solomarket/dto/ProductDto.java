@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 public class ProductDto {
     private int productNo;
     private int sellerId;
+    private String nickname;
     private String title;
     private int price;
     private String content;

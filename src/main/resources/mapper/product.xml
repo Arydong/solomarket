@@ -51,6 +51,7 @@
         SELECT
         p.product_no AS productNo,
         p.seller_id,
+        u.nickname,
         p.title,
         p.price,
         p.content,
@@ -61,6 +62,7 @@
         p.view_count
         FROM tbl_product p
         LEFT JOIN tbl_file f ON p.product_no = f.product_no
+        LEFT JOIN tbl_user u ON p.seller_id = u.user_no
         WHERE p.product_no = #{productNo}
     </select>
 

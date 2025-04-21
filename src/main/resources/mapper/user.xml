@@ -69,4 +69,22 @@
         WHERE user_id = #{userId}
     </update>
 
+    <update id="incrementReportCount">
+        UPDATE tbl_user
+        SET report_count = report_count + 1
+        WHERE user_no = #{userNo}
+    </update>
+
+    <select id="getReportCount" resultType="int">
+        SELECT report_count
+        FROM tbl_user
+        WHERE user_no = #{userNo}
+    </select>
+
+    <update id="deactivateUser">
+        UPDATE tbl_user
+        SET user_status = 'N'
+        WHERE user_no = #{userNo}
+    </update>
+
 </mapper>

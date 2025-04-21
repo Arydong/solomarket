@@ -23,10 +23,15 @@
 <main layout:fragment="content">
     <div class="container">
         <section class="board-detail">
-
             <h1 th:text="${board.title}">제목</h1>
             <p>
                 작성자: <span th:text="${board.nickname}"></span><br>
+                <button type="button" class="report-btn"
+                        th:if="${loginUserNo != null}"
+                        th:data-user-no="${board.userNo}"
+                        onclick="reportUser(this)">
+                    신고
+                </button>
                 조회수: <span th:text="${board.viewCount}"></span><br>
                 작성일: <span th:text="${#temporals.format(board.createdAt, 'yyyy-MM-dd')}"></span>
             </p>
@@ -46,6 +51,7 @@
 
         <section class="comment-section">
             <h2>댓글</h2>
+
             <div id="comment-list">
                 <div th:if="${loginUserNo != null}" class="comment-form">
                     <form id="commentForm">
@@ -63,6 +69,13 @@
                                   style="font-weight:bold; color:blue;">(작성자)</span>
                             : <span th:text="${comment.content}"></span>
                             <small th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}"></small>
+                            <button type="button" class="report-btn"
+                                    th:if="${loginUserNo != null}"
+                                    th:data-user-no="${comment.userNo}"
+                                    onclick="reportUser(this)">
+                                신고
+                            </button>
+
                             <button type="button" class="reply-btn"
                                     th:if="${loginUserNo != null}"
                                     th:data-comment-id="${comment.commentId}">

@@ -24,5 +24,14 @@
         </div>
     </div>
 </form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('error')) {
+            alert('신고 누적으로 계정이 잠겼습니다.');
+        }
+    });
+</script>
 </body>
 </html>
