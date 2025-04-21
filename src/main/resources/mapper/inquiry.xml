@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solomarket.dao.InquiryDao">
+    
+    <insert id="insertInquiry" parameterType="com.solomarket.dto.InquiryDto">
+        INSERT INTO tbl_inquiry (user_no, title, content, created_at, status)
+        VALUES (#{userNo}, #{title}, #{content}, NOW(), 'W')
+    </insert>
+
+    <select id="findByUserNo" resultType="com.solomarket.dto.InquiryDto">
+        SELECT * FROM tbl_inquiry
+        WHERE user_no = #{userNo}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByInquiryId" resultType="com.solomarket.dto.InquiryDto">
+        SELECT * FROM tbl_inquiry
+        WHERE inquiry_id = #{inquiryId}
+    </select>
+</mapper>

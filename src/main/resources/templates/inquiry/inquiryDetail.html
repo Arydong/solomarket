@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>문의 상세</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div th:replace="~{/layout/fragment/header :: header}"></div>
+<div th:replace="~{/layout/fragment/nav :: nav}"></div>
+
+<main layout:fragment="content">
+    <div class="container">
+        <h1>문의 상세</h1>
+
+        <p><strong>제목:</strong> <span th:text="${inquiry.title}">제목</span></p>
+        <p><strong>내용:</strong></p>
+        <p th:text="${inquiry.content}">내용</p>
+        <p><strong>작성일:</strong> <span th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd')}"></span></p>
+        <p><strong>상태:</strong>
+            <span th:if="${inquiry.status == 'W'}">접수됨</span>
+            <span th:if="${inquiry.status == 'R'}">읽음</span>
+            <span th:if="${inquiry.status == 'S'}">완료</span>
+        </p>
+
+        <a href="/inquiry/list">목록으로 돌아가기</a>
+    </div>
+</main>
+
+<div th:replace="~{/layout/fragment/footer :: footer}"></div>
+
+</body>
+</html>
